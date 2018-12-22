@@ -20,14 +20,19 @@
     --scoreboard-top-margin: 10px;
     --scoreboard-background: rgb(255,255,255,0.75);
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
+    --scoreboard-border-width: 0px;
+    --scoreboard-border-color: rgba(0,0,0,0.5);
+    --scoreboard-corner-radius: 0px;
 
     /* Center Styles */
     --center-background: linear-gradient(to bottom right, #FF405F, #4091FF);
     --center-width: 15%;
-    --center-scale: 1;
+    --center-scale: 1.1;
+    --center-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --title-font-size: 0.75rem;
     --title-color: rgba(255,255,255,1);
     --image-size: 20px;
+
 
     /* Score Styles */
     --score-shadow: 0px 2px 6px rgba(0,0,0,0.5);
@@ -55,9 +60,13 @@
     background-color: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
-    margin-left: calc((100% - var(--scoreboard-width);)/2);
+    margin-left: calc(((100% - var(--scoreboard-width))/2) - var(--scoreboard-border-width));
     box-shadow: var(--scoreboard-shadow);
     font-family: var(--font-family);
+    border-style: solid;
+    border-radius: var(--scoreboard-corner-radius);
+    border-width: var(--scoreboard-border-width);
+    border-color: var(--scoreboard-border-color);
   }
 
   .score {
@@ -118,7 +127,6 @@
   #center-content {
     width: var(--center-width);
     height: 100%;
-    display: grid;
     font-family: sans-serif;
     margin: 0;
     position: relative;
@@ -127,28 +135,42 @@
     background: var(--center-background);
     z-index: 1;
     transform: scale(var(--center-scale));
+    box-shadow: var(--center-shadow);
     /* background: white; */
   }
 
-    #center-image {
-      width: auto;
-      height: var(--image-size);
-      max-height: var(--scoreboard-height);
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+    #content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
-    #title {
-      margin: 0;
-      text-align: center;
-      font-weight: bold;
-      background: rgba(0,0,0,0);
-      border: 0px solid;
-      font-size: var(--title-font-size);
-      font-family: var(--font-family);
-      color: var(--title-color);
-    }
+      #center-image {
+        width: auto;
+        height: var(--image-size);
+        max-height: var(--scoreboard-height);
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 5px;
+      }
+
+      #title-input{
+        display: flex;
+        justify-content: center;
+      }
+
+      #title {
+        margin: 0;
+        text-align: center;
+        font-weight: bold;
+        background: rgba(0,0,0,0);
+        border: 0px solid;
+        font-size: var(--title-font-size);
+        font-family: var(--font-family);
+        color: var(--title-color);
+      }
 
   #left-content, #right-content {
     width: calc((100% - var(--center-width))/2);
@@ -200,9 +222,15 @@
     </div>
 
     <div id="center-content">
-      <!-- <img id="center-image" src="LAHSSmashLongBorderless.png"> -->
-      <!-- <p id="title">Grand Finals</p> -->
-      <input id="title" type="text" value="Game" placeholder="_" onfocus="this.select();">
+      <div id="content">
+        <div>
+        <img id="center-image" src="LAHSSmashLongBorderless.png">
+        </div>
+        <!-- <p id="title">Grand Finals</p> -->
+        <div id="title-input">
+          <input id="title" type="text" value="Game" placeholder="_" onfocus="this.select();">
+        </div>
+      </div>
     </div>
 
     <div id="right-content">
