@@ -1,23 +1,16 @@
 <html>
-<script src="stretchy.js" async></script>
-<script>
-
-// Stretchy.resize(document.getElementById("playername"));
-
-</script>
-
 <head>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,900" rel="stylesheet">
   <style>
-
   :root {
     /* Global Styles */
     --font-family: 'Roboto', sans-serif;
 
     /* Scoreboard Styles */
+    --scoreboard-scale: 1.25;
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
-    --scoreboard-top-margin: 10px;
+    --scoreboard-top-margin: 1%;
     --scoreboard-background: rgb(255,255,255,0.75);
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --scoreboard-border-width: 0px;
@@ -26,8 +19,8 @@
 
     /* Center Styles */
     --center-background: linear-gradient(to bottom right, #FF405F, #4091FF);
-    --center-width: 15%;
-    --center-scale: 1.1;
+    --center-width: 20%;
+    --center-scale: 1;
     --center-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --title-font-size: 0.75rem;
     --title-color: rgba(255,255,255,1);
@@ -50,13 +43,13 @@
     --player-name-font-size: 1rem;
   }
 
-  :focus {
-    outline: none;
+  ::selection{
+      background: rgba(0,0,0,0.1);
   }
 
   .scoreboard {
     display: flex;
-    margin-top: var(--scoreboard-top-margin);
+    margin-top: calc(var(--scoreboard-top-margin) * var(--scoreboard-scale));
     background-color: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
@@ -67,6 +60,7 @@
     border-radius: var(--scoreboard-corner-radius);
     border-width: var(--scoreboard-border-width);
     border-color: var(--scoreboard-border-color);
+    transform: scale(var(--scoreboard-scale));
   }
 
   .score {
@@ -113,15 +107,37 @@
 
   .icon {
     width: auto;
+    height: auto;
     right: 0;
     align-self: center;
-    padding-left: 10px;
-    padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     background: var(--icon-background);
     height: var(--icon-size);
     max-height: var(--scoreboard-height);
+    overflow: hidden;
+  }
+
+  .playericon {
+    position: relative;
+    min-width: 20px;
+    max-width: 80px;
+    min-height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    overflow: hidden;
+  }
+
+  .icon-chooser {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .icon-chooser + button {
+    font-size: 20px;
   }
 
   #center-content {
@@ -211,39 +227,71 @@
   <div class="scoreboard">
 
     <div id="left-content">
-
         <div class="player">
-          <img class="icon" src="CharIcons/BO.png">
-          <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();">
+          <div class="playericon">
+            <input type="file" class="icon-chooser" id="left-icon-chooser" accept="image/*">
+            <img class="icon" id="left-icon" src="assets/file.png">
+          </div>
+          <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false">
         </div>
-
-        <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();">
-
+        <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false">
     </div>
 
     <div id="center-content">
       <div id="content">
         <div>
-        <img id="center-image" src="LAHSSmashLongBorderless.png">
+          <img id="center-image" src="LAHSSmashLongBorderless.png">
         </div>
-        <!-- <p id="title">Grand Finals</p> -->
         <div id="title-input">
-          <input id="title" type="text" value="Game" placeholder="_" onfocus="this.select();">
+          <input id="title" type="text" value="Title" placeholder="_" onfocus="this.select();" spellcheck="false">
         </div>
       </div>
     </div>
 
     <div id="right-content">
-
-      <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();">
-
+      <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false">
       <div class="player">
-        <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();">
-        <img class="icon" src="CharIcons/BO.png">
+        <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false">
+        <div class="playericon">
+          <input type="file" class="icon-chooser" id="right-icon-chooser" accept="image/*">
+          <img class="icon" id="right-icon" src="assets/file.png">
+        </div>
       </div>
-
     </div>
 
   </div>
 </body>
+<script src="stretchy.js" async></script>
+<script>
+
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelector('#left-icon-chooser').onchange=readImageLeft;
+},false);
+
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelector('#right-icon-chooser').onchange=readImageRight;
+},false);
+
+function readImageLeft(event) {
+    // You can use “this” to refer to the selected element.
+    // fileDialogBox(event);
+    var selectedFile = event.target.files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      document.querySelector('#left-icon').src = event.target.result;
+    }
+    fileReader.readAsDataURL(selectedFile);
+}
+
+function readImageRight(event) {
+    // You can use “this” to refer to the selected element.
+    // fileDialogBox(event);
+    var selectedFile = event.target.files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      document.querySelector('#right-icon').src = event.target.result;
+    }
+    fileReader.readAsDataURL(selectedFile);
+}
+</script>
 </html>
