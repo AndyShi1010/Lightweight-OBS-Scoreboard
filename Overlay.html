@@ -1,13 +1,14 @@
 <html>
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900" rel="stylesheet">
+  <meta charset='utf-8'>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,900" rel="stylesheet">
   <style>
   :root {
     /* Global Styles */
     --font-family: 'Roboto', sans-serif;
 
     /* Scoreboard Styles */
-    --scoreboard-scale: 1.25;
+    --scoreboard-scale: 1;
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
     --scoreboard-top-margin: 1%;
@@ -21,16 +22,17 @@
     --center-background: linear-gradient(to bottom right, #FF405F, #4091FF);
     --center-width: 20%;
     --center-scale: 1;
+    --center-corner-radius: 0px;
     --center-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --title-font-size: 0.75rem;
-    --title-color: rgba(255,255,255,1);
+    --title-color: rgb(255,255,255);
     --image-size: 20px;
 
 
     /* Score Styles */
     --score-shadow: 0px 2px 6px rgba(0,0,0,0.5);
     --score-background: rgba(0,0,0,0.1);
-    --score-text-color: rgba(255,255,255,1);
+    --score-text-color: rgb(255,255,255);
     --score-font-size: 1.25rem;
 
     /* Icon Styles */
@@ -38,8 +40,8 @@
     --icon-background: rgba(0,0,0,0);
 
     /* Player Name Styles */
-    --player-name-color: rgba(0,0,0,1);
-    --player-name-background: rgba(0,0,0,0);
+    --player-name-color: rgb(0,0,0);
+    --player-name-background: rgb(0,0,0,0);
     --player-name-font-size: 1rem;
   }
 
@@ -47,9 +49,9 @@
       background: rgba(0,0,0,0.1);
   }
 
-  .scoreboard {
+  #scoreboard {
     display: flex;
-    margin-top: calc(var(--scoreboard-top-margin) * var(--scoreboard-scale));
+    margin-top: calc(var(--scoreboard-top-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
     background-color: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
@@ -75,6 +77,7 @@
     border: solid 0px #000000;
     font-size: var(--score-font-size);
     font-family: var(--font-family);
+    font-weight: normal;
     background: var(--score-background);
     color: var(--score-text-color);
     text-shadow: var(--score-shadow);
@@ -93,6 +96,7 @@
     border: solid 0px #000000;
     margin: 0;
     padding: 5px;
+    /* max-width: calc(var(--scoreboard-width) * 1%); */
     background: var(--player-name-background);
     align-self: center;
     font-weight: bold;
@@ -128,12 +132,13 @@
     overflow: hidden;
   }
 
-  .icon-chooser {
+  .image-chooser {
     position: absolute;
     width: 100%;
     height: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: 5;
   }
 
   .icon-chooser + button {
@@ -145,6 +150,7 @@
     height: 100%;
     font-family: sans-serif;
     margin: 0;
+    display: grid;
     position: relative;
     align-items: center;
     justify-content: center;
@@ -152,29 +158,26 @@
     z-index: 1;
     transform: scale(var(--center-scale));
     box-shadow: var(--center-shadow);
-    /* background: white; */
-  }
+    max-width: var(--center-width);
+    overflow: hidden;
+    border-radius: var(--center-corner-radius);
 
-    #content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+  }
+      #center-content-image {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+      }
 
       #center-image {
         width: auto;
-        height: var(--image-size);
-        max-height: var(--scoreboard-height);
-        display: block;
+        height: auto;
+        min-height: 20px;
+        max-height: calc(var(--scoreboard-height)/2.5);
+        min-width: 20px;
         margin-left: auto;
         margin-right: auto;
-        padding-bottom: 5px;
-      }
-
-      #title-input{
-        display: flex;
-        justify-content: center;
+        position: relative;
       }
 
       #title {
@@ -186,6 +189,7 @@
         font-size: var(--title-font-size);
         font-family: var(--font-family);
         color: var(--title-color);
+        word-break: break-all;
       }
 
   #left-content, #right-content {
@@ -214,46 +218,170 @@
       right: 0;
     }
 
-    /* #txt {
-      min-width:50px!important;
-      max-width:99.99%!important;
-      transition: width 0.25s;
-      text-align:center;
-    } */
+
+  #settings-toggle {
+    bottom: 0px;
+    right: 0px;
+    width: 5%;
+    height: 5%;
+    position: absolute;
+    border: 0px solid;
+    opacity: 0;
+    transition: 0.25s;
+    font-size: 16pt;
+    font-family: 'Roboto', sans-serif;
+    background: rgba(0,0,0,0.5);
+  }
+
+  #settings-toggle:hover {
+    opacity: 1;
+    height: 10%;
+    width: 10%;
+    color: white;
+  }
+  /* Settings Panel Styles*/
+  #settings {
+    bottom: 15%;
+    width: 70%;
+    margin-left: 15%;
+    background: white;
+    position: fixed;
+    height: 70%;
+    z-index: 5;
+    opacity: 0.5;
+    transition: 0.25s;
+    border: 1px solid rgba(0,0,0,0.25);
+    overflow: scroll;
+  }
+
+  #settings:hover {
+    opacity: 1;
+    box-shadow: 0px 5px 40px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0);
+  }
+
+  #settings h1{
+    font-family: 'Roboto', sans-serif;
+    font-size: 22pt;
+    font-weight: bold;
+    margin: 20px;
+  }
+
+  #settings h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16pt;
+    font-weight: 500;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+  }
+
+  .settings-module {
+    display: grid;
+  }
+
+  .controls-container {
+    display: flex;
+    margin: 20px;
+    margin-top: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+  }
+  .control {
+    display: block;
+    margin: 5px;
+    margin-bottom: 0;
+  }
+
   </style>
 </head>
 
 <body>
-  <div class="scoreboard">
+  <button id="settings-toggle" onclick="displayMenu()">🛠 Settings</button>
 
-    <div id="left-content">
-        <div class="player">
-          <div class="playericon">
-            <input type="file" class="icon-chooser" id="left-icon-chooser" accept="image/*">
-            <img class="icon" id="left-icon" src="assets/file.png">
-          </div>
-          <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false">
+  <div id="settings" style="display: none;">
+    <h1>🛠 Settings</h1>
+    <div class="settings-module" id="settings-Scoreboard">
+      <h2>Scoreboard</h2>
+      <div class="controls-container" id="scoreboard-controls">
+        <div class="control">
+          <p id="scoreboard-scale-control">Scale: 1</p></p>
+          <input type="range" min="0" max="500" value="100" class="slider" id="scoreboard-scale-slider" oninput="updateScoreboardScale()">
         </div>
-        <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false">
-    </div>
-
-    <div id="center-content">
-      <div id="content">
-        <div>
-          <img id="center-image" src="LAHSSmashLongBorderless.png">
+        <div class="control">
+          <p id="scoreboard-width-control">Width: 60%</p></p>
+          <input type="range" min="0" max="100" value="60" class="slider" id="scoreboard-width-slider" oninput="updateScoreboardWidth()">
         </div>
-        <div id="title-input">
-          <input id="title" type="text" value="Title" placeholder="_" onfocus="this.select();" spellcheck="false">
+        <div class="control">
+          <p id="scoreboard-height-control">Height: 60px</p></p>
+          <input type="range" min="0" max="500" value="60" class="slider" id="scoreboard-height-slider" oninput="updateScoreboardHeight()">
+        </div>
+        <div class="control">
+          <p id="scoreboard-radius-control">Corner Radius: 0px</p></p>
+          <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius()">
         </div>
       </div>
     </div>
 
+    <div class="settings-module" id="settings-Scoreboard Center">
+      <h2>Scoreboard Center</h2>
+      <div class="controls-container" id="scoreboard-controls">
+        <div class="control">
+          <p id="center-width-control">Width: 20%</p></p>
+          <input type="range" min="0" max="100" value="20" class="slider" id="center-width-slider" oninput="updateCenterWidth()">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-module" id="settings-Score">
+      <h2>Score</h2>
+      
+    </div>
+
+    <div class="settings-module" id="settings-Icons">
+      <h2>Icons</h2>
+
+    </div>
+
+    <div class="settings-module"id="settings-Player Names">
+      <h2>Player Names</h2>
+
+    </div>
+
+  </div>
+
+
+  <div id="scoreboard">
+
+    <div id="left-content">
+        <div class="player">
+          <div class="playericon">
+            <input type="file" class="image-chooser" id="left-icon-chooser" accept="image/*">
+            <img class="icon" id="left-icon" src="assets/file.png">
+          </div>
+          <p class="playername" onclick="updateTextDisplayed(this)">Player One</p>
+          <!-- <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false"> -->
+        </div>
+          <p class="score" id="player-one-score" onclick="updateTextDisplayed(this)">0</p>
+        <!-- <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false"> -->
+    </div>
+
+    <div id="center-content">
+      <div id="center-content-image">
+        <input type="file" class="image-chooser" id="center-image-chooser" accept="image/*">
+        <img id="center-image" src="assets/file.png">
+      </div>
+      <p class="title" id="title" onclick="updateTextDisplayed(this)">Title</p>
+    </div>
+
     <div id="right-content">
-      <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false">
+      <p class="score" id="player-two-score" onclick="updateTextDisplayed(this)">0</p>
       <div class="player">
-        <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false">
+        <p class="playername" onclick="updateTextDisplayed(this)">Player Two</p>
         <div class="playericon">
-          <input type="file" class="icon-chooser" id="right-icon-chooser" accept="image/*">
+          <input type="file" class="image-chooser" id="right-icon-chooser" accept="image/*">
           <img class="icon" id="right-icon" src="assets/file.png">
         </div>
       </div>
@@ -261,20 +389,23 @@
 
   </div>
 </body>
-<script src="stretchy.js" async></script>
+
+<!-- <script src="stretchy.js" async></script> -->
 <script>
 
 document.addEventListener('DOMContentLoaded',function() {
-    document.querySelector('#left-icon-chooser').onchange=readImageLeft;
+    document.querySelector('#left-icon-chooser').onchange=updateLeftImage;
 },false);
 
 document.addEventListener('DOMContentLoaded',function() {
-    document.querySelector('#right-icon-chooser').onchange=readImageRight;
+    document.querySelector('#right-icon-chooser').onchange=updateRightImage;
 },false);
 
-function readImageLeft(event) {
-    // You can use “this” to refer to the selected element.
-    // fileDialogBox(event);
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelector('#center-image-chooser').onchange=updateCenterImage;
+},false);
+
+function updateLeftImage(event) {
     var selectedFile = event.target.files[0];
     var fileReader = new FileReader();
     fileReader.onload = function(event) {
@@ -283,9 +414,7 @@ function readImageLeft(event) {
     fileReader.readAsDataURL(selectedFile);
 }
 
-function readImageRight(event) {
-    // You can use “this” to refer to the selected element.
-    // fileDialogBox(event);
+function updateRightImage(event) {
     var selectedFile = event.target.files[0];
     var fileReader = new FileReader();
     fileReader.onload = function(event) {
@@ -293,5 +422,59 @@ function readImageRight(event) {
     }
     fileReader.readAsDataURL(selectedFile);
 }
+
+function updateCenterImage(event) {
+    var selectedFile = event.target.files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      document.querySelector('#center-image').src = event.target.result;
+    }
+    fileReader.readAsDataURL(selectedFile);
+}
+
+function updateTextDisplayed(element) {
+    var prevText = element.textContent;
+    var newText = prompt("What should be displayed?");
+    if ((newText != null) && (newText !== "")) {
+      element.innerHTML = newText;
+    } else {
+      element.innerHTML = prevText;
+    }
+}
+
+
+function displayMenu() {
+  if (document.getElementById("settings").style.display === "none") {
+    document.getElementById("settings").style.display = "block";
+  } else {
+    document.getElementById("settings").style.display = "none";
+  }
+}
+
+function updateScoreboardScale() {
+  document.documentElement.style.setProperty('--scoreboard-scale', (document.getElementById('scoreboard-scale-slider').value / 100));
+  document.getElementById("scoreboard-scale-control").innerHTML = "Scale: " + (document.getElementById('scoreboard-scale-slider').value / 100);
+}
+
+function updateScoreboardWidth() {
+  document.documentElement.style.setProperty('--scoreboard-width', (document.getElementById('scoreboard-width-slider').value) + "%");
+  document.getElementById("scoreboard-width-control").innerHTML = "Width: " + (document.getElementById('scoreboard-width-slider').value + "%");
+}
+
+function updateScoreboardHeight() {
+  document.documentElement.style.setProperty('--scoreboard-height', (document.getElementById('scoreboard-height-slider').value) + "px");
+  document.getElementById("scoreboard-height-control").innerHTML = "Height: " + (document.getElementById('scoreboard-height-slider').value + "px");
+}
+
+function updateScoreboardRadius() {
+  document.documentElement.style.setProperty('--scoreboard-corner-radius', (document.getElementById('scoreboard-radius-slider').value) + "px");
+  document.getElementById("scoreboard-radius-control").innerHTML = "Corner Radius: " + (document.getElementById('scoreboard-radius-slider').value + "px");
+}
+
+function updateCenterWidth() {
+  document.documentElement.style.setProperty('--center-width', (document.getElementById('center-width-slider').value) + "%");
+  document.getElementById("center-width-control").innerHTML = "Width: " + (document.getElementById('center-width-slider').value + "%");
+}
+
 </script>
 </html>
