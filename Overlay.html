@@ -38,7 +38,7 @@
     --score-shadow: 0px 2px 6px rgba(0,0,0,0.5);
     --score-background: rgba(0,0,0,0.1);
     --score-text-color: rgb(255,255,255);
-    --score-font-size: 1.25rem;
+    --score-font-size: 16pt;
 
     /* Icon Styles */
     --icon-size: 30px;
@@ -47,7 +47,7 @@
     /* Player Name Styles */
     --player-name-color: rgb(0,0,0);
     --player-name-background: rgb(0,0,0,0);
-    --player-name-font-size: 1rem;
+    --player-name-font-size: 12pt;
   }
 
   ::selection{
@@ -177,8 +177,7 @@
       #center-image {
         width: auto;
         height: var(--image-size);
-        max-height: calc(var(--scoreboard-height)/2.5);
-
+        max-height: calc(var(--scoreboard-height)/2);
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -358,7 +357,7 @@
 
     <div class="settings-module" id="settings-Scoreboard Center">
       <h2>Scoreboard Center</h2>
-      <div class="controls-container" id="scoreboard-controls">
+      <div class="controls-container" id="center-controls">
         <div class="control">
           <p id="center-scale-control">Scale: 1</p>
           <input type="range" min="0" max="500" value="100" class="slider" id="center-scale-slider" oninput="updateCenterScale()">
@@ -384,17 +383,32 @@
 
     <div class="settings-module" id="settings-Score">
       <h2>Score</h2>
-
+      <div class="controls-container" id="score-controls">
+        <div class="control">
+          <p id="score-font-size-control">Font Size: 16pt</p>
+          <input type="range" min="0" max="64" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize()">
+        </div>
+      </div>
     </div>
 
     <div class="settings-module" id="settings-Icons">
       <h2>Icons</h2>
-
+      <div class="controls-container" id="icons-controls">
+        <div class="control">
+          <p id="icon-size-control">Image Size: 30px</p>
+          <input type="range" min="0" max="500" value="30" class="slider" id="icon-size-slider" oninput="updateIconSize()">
+        </div>
+      </div>
     </div>
 
     <div class="settings-module"id="settings-Player Names">
       <h2>Player Names</h2>
-
+      <div class="controls-container" id="player-names-controls">
+        <div class="control">
+          <p id="player-name-font-size-control">Font Size: 12pt</p>
+          <input type="range" min="0" max="64" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize()">
+        </div>
+      </div>
     </div>
 
   </div>
@@ -546,6 +560,21 @@ function updateTitleFontSize() {
 function updateCenterImageSize() {
   document.documentElement.style.setProperty('--image-size', (document.getElementById('center-image-size-slider').value) + "px");
   document.getElementById("center-image-size-control").innerHTML = "Image Size: " + (document.getElementById('center-image-size-slider').value + "px");
+}
+
+function updateScoreFontSize() {
+  document.documentElement.style.setProperty('--score-font-size', (document.getElementById('score-font-size-slider').value) + "pt");
+  document.getElementById("score-font-size-control").innerHTML = "Font Size: " + (document.getElementById('score-font-size-slider').value + "pt");
+}
+
+function updateIconSize() {
+  document.documentElement.style.setProperty('--icon-size', (document.getElementById('icon-size-slider').value) + "px");
+  document.getElementById("icon-size-control").innerHTML = "Image Size: " + (document.getElementById('icon-size-slider').value + "px");
+}
+
+function updatePlayerNameFontSize() {
+  document.documentElement.style.setProperty('--player-name-font-size', (document.getElementById('player-name-font-size-slider').value) + "pt");
+  document.getElementById("player-name-font-size-control").innerHTML = "Font Size: " + (document.getElementById('player-name-font-size-slider').value + "pt");
 }
 
 </script>
