@@ -330,6 +330,24 @@
      background: #E0E0E0;
    }
 
+   #reset-button {
+     margin: 20px;
+     height: 40px;
+     width: 140px;
+     background: #EF5350;
+     border: 2px solid #EF5350;
+     color: white;
+     font-family: 'Roboto', sans-serif;
+     font-size: 12pt;
+     font-weight: bold;
+     padding: 10px;
+     transition: 0.25s;
+   }
+
+   #reset-button:hover {
+     background: #ffffff;
+     color: #EF5350;
+   }
   </style>
 </head>
 
@@ -425,6 +443,7 @@
       </div>
     </div>
 
+    <button id="reset-button" onclick="reloadPage()">Reset All</button>
   </div>
 
 
@@ -599,6 +618,10 @@ function updateIconSize() {
 function updatePlayerNameFontSize() {
   document.documentElement.style.setProperty('--player-name-font-size', (document.getElementById('player-name-font-size-slider').value) + "pt");
   document.getElementById("player-name-font-size-control").innerHTML = "Font Size: " + (document.getElementById('player-name-font-size-slider').value + "pt");
+}
+
+function reloadPage() {
+  location.reload();
 }
 
 </script>
