@@ -6,6 +6,7 @@
 
   body {
     margin: 0px;
+    overflow: hidden;
   }
 
   :root {
@@ -70,6 +71,17 @@
     border-width: var(--scoreboard-border-width);
     border-color: var(--scoreboard-border-color);
     transform: scale(var(--scoreboard-scale));
+    animation: slide-in-top 1s;
+    animation-timing-function: ease;
+  }
+
+  @keyframes slide-in-top {
+    from {
+      top: calc(-1 * (var(--scoreboard-height) + var(--scoreboard-vertical-margin)));
+    }
+    to {
+      top: 0;
+    }
   }
 
   .score {
@@ -132,7 +144,6 @@
   .playericon {
     position: relative;
     min-width: 20px;
-    max-width: 80px;
     min-height: 20px;
     margin-left: 5px;
     margin-right: 5px;
@@ -247,8 +258,8 @@
   /* Settings Panel Styles*/
   #settings {
     bottom: 15%;
-    width: 70%;
-    margin-left: 15%;
+    width: 80%;
+    margin-left: 10%;
     background: white;
     position: fixed;
     height: 70%;
@@ -280,7 +291,6 @@
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
-    margin-bottom: 10px;
     color: #212121;
   }
 
@@ -295,11 +305,40 @@
     font-family: 'Roboto', sans-serif;
     color: #212121;
     font-weight: normal;
+    font-size: 12pt;
   }
   .control {
     display: block;
-    margin: 10px;
+    margin: 20px;
     margin-bottom: 0;
+    margin-top: 0;
+    transition: 0.25s;
+  }
+
+  .control p {
+    cursor: pointer;
+  }
+
+  .control p:hover {
+    color: white;
+  }
+
+  .control p:hover::before {
+    animation: fade-in 0.25s;
+    position: absolute;
+    content: 'Reset';
+    color: #EF5350;
+    font-weight: 500;
+    background: white;
+  }
+
+  @keyframes fade-in {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
   }
 
   input[type=range] {
@@ -313,21 +352,65 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    border-radius: 10px;
+    border-radius: 0px;
     background: #78909C;
     cursor: pointer;
     transition: 0.25s;
-    transform: scale(0.8);
+    transform: scale(0.75);
   }
 
   input[type=range]::-webkit-slider-thumb:hover {
-     transform: scale(1.25);
+     transform: scale(1);
      background: white;
-     box-shadow: inset 0px 0px 0px 2px #78909C;
+     box-shadow: inset 0px 0px 0px 3px #78909C;
    }
 
    input[type=radio] {
      background: #E0E0E0;
+   }
+
+   .radio-option {
+     display: block;
+     position: relative;
+     padding-left: 35px;
+     margin-bottom: 12px;
+     cursor: pointer;
+     font-size: 12pt;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
+     transition: 0.25s;
+   }
+
+   .radio-option input {
+     position: absolute;
+     opacity: 0;
+     cursor: pointer;
+   }
+
+   .check-radio {
+     position: absolute;
+     top: 0;
+     left: 0;
+     height: 15px;
+     width: 15px;
+     background-color: #E0E0E0;
+     border-radius: 50%;
+     transition: 0.25s;
+     vertical-align: middle;
+   }
+
+   .radio-option:hover input ~ .check-radio {
+     background-color: #ffffff;
+     box-shadow: inset 0px 0px 0px 2px #78909C;
+     transform: scale(1.25);
+   }
+
+   .radio-option input:checked ~ .check-radio {
+     background-color: #78909C;
+     box-shadow: inset 0px 0px 0px 3px #E0E0E0;
+     transform: scale(1);
    }
 
    #reset-button {
@@ -360,29 +443,35 @@
       <h2>Scoreboard</h2>
       <div class="controls-container" id="scoreboard-controls">
         <div class="control">
-          <p id="scoreboard-placement-control">Placement:</p>
-          <input type="radio" name="placement" value="Top" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this)" checked>Top<br>
-          <input type="radio" name="placement" value="Bottom" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this)">Bottom<br>
+          <p id="scoreboard-placement-control" onclick="updateScoreboardPlacement('Top')">Placement:</p>
+          <label class="radio-option">
+            <input type="radio" name="placement" value="Top" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this.value)" checked>Top<br>
+            <span class="check-radio"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="placement" value="Bottom" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this.value)">Bottom<br>
+            <span class="check-radio"></span>
+          </label>
         </div>
         <div class="control">
-          <p id="scoreboard-scale-control">Scale: 1</p>
-          <input type="range" min="0" max="500" value="100" class="slider" id="scoreboard-scale-slider" oninput="updateScoreboardScale()">
+          <p id="scoreboard-scale-control" onclick="updateScoreboardScale(100)">Scale: 1</p>
+          <input type="range" min="0" max="500" value="100" class="slider" id="scoreboard-scale-slider" oninput="updateScoreboardScale(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-width-control">Width: 60%</p>
-          <input type="range" min="0" max="100" value="60" class="slider" id="scoreboard-width-slider" oninput="updateScoreboardWidth()">
+          <p id="scoreboard-width-control" onclick="updateScoreboardWidth(60)">Width: 60%</p>
+          <input type="range" min="0" max="100" value="60" class="slider" id="scoreboard-width-slider" oninput="updateScoreboardWidth(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-height-control">Height: 60px</p>
-          <input type="range" min="0" max="500" value="60" class="slider" id="scoreboard-height-slider" oninput="updateScoreboardHeight()">
+          <p id="scoreboard-height-control" onclick="updateScoreboardHeight(60)">Height: 60px</p>
+          <input type="range" min="0" max="500" value="60" class="slider" id="scoreboard-height-slider" oninput="updateScoreboardHeight(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-vertical-margin-control">Margin: 5px</p>
-          <input type="range" min="0" max="1000" value="5" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin()">
+          <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(5)">Vertical Margin: 5px</p>
+          <input type="range" min="0" max="1000" value="5" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-radius-control">Corner Radius: 0px</p>
-          <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius()">
+          <p id="scoreboard-radius-control" onclick="updateScoreboardRadius(0)">Corner Radius: 0px</p>
+          <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius(this.value)">
         </div>
       </div>
     </div>
@@ -391,24 +480,24 @@
       <h2>Scoreboard Center</h2>
       <div class="controls-container" id="center-controls">
         <div class="control">
-          <p id="center-scale-control">Scale: 1</p>
-          <input type="range" min="0" max="500" value="100" class="slider" id="center-scale-slider" oninput="updateCenterScale()">
+          <p id="center-scale-control" onclick="updateCenterScale(100)">Scale: 1</p>
+          <input type="range" min="0" max="500" value="100" class="slider" id="center-scale-slider" oninput="updateCenterScale(this.value)">
         </div>
         <div class="control">
-          <p id="center-width-control">Width: 20%</p>
-          <input type="range" min="0" max="100" value="20" class="slider" id="center-width-slider" oninput="updateCenterWidth()">
+          <p id="center-width-control" onclick="updateCenterWidth(20)">Width: 20%</p>
+          <input type="range" min="0" max="100" value="20" class="slider" id="center-width-slider" oninput="updateCenterWidth(this.value)">
         </div>
         <div class="control">
-          <p id="center-radius-control">Corner Radius: 0px</p>
-          <input type="range" min="0" max="200" value="0" class="slider" id="center-radius-slider" oninput="updateCenterRadius()">
+          <p id="center-radius-control" onclick="updateCenterRadius(0)">Corner Radius: 0px</p>
+          <input type="range" min="0" max="200" value="0" class="slider" id="center-radius-slider" oninput="updateCenterRadius(this.value)">
         </div>
         <div class="control">
-          <p id="title-font-size-control">Font Size: 9pt</p>
-          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize()">
+          <p id="title-font-size-control" onclick="updateTitleFontSize(9)">Font Size: 9pt</p>
+          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize(this.value)">
         </div>
         <div class="control">
-          <p id="center-image-size-control">Image Size: 20px</p>
-          <input type="range" min="0" max="200" value="20" class="slider" id="center-image-size-slider" oninput="updateCenterImageSize()">
+          <p id="center-image-size-control" onclick="updateCenterImageSize(20)">Image Size: 20px</p>
+          <input type="range" min="0" max="200" value="20" class="slider" id="center-image-size-slider" oninput="updateCenterImageSize(this.value)">
         </div>
       </div>
     </div>
@@ -417,8 +506,8 @@
       <h2>Score</h2>
       <div class="controls-container" id="score-controls">
         <div class="control">
-          <p id="score-font-size-control">Font Size: 16pt</p>
-          <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize()">
+          <p id="score-font-size-control" onclick="updateScoreFontSize(16)">Font Size: 16pt</p>
+          <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize(this.value)">
         </div>
       </div>
     </div>
@@ -427,8 +516,8 @@
       <h2>Icons</h2>
       <div class="controls-container" id="icons-controls">
         <div class="control">
-          <p id="icon-size-control">Image Size: 30px</p>
-          <input type="range" min="0" max="500" value="30" class="slider" id="icon-size-slider" oninput="updateIconSize()">
+          <p id="icon-size-control" onclick="updateIconSize(30)">Image Size: 30px</p>
+          <input type="range" min="0" max="500" value="30" class="slider" id="icon-size-slider" oninput="updateIconSize(this.value)">
         </div>
       </div>
     </div>
@@ -437,12 +526,13 @@
       <h2>Player Names</h2>
       <div class="controls-container" id="player-names-controls">
         <div class="control">
-          <p id="player-name-font-size-control">Font Size: 12pt</p>
-          <input type="range" min="0" max="128" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize()">
+          <p id="player-name-font-size-control" onclick="updatePlayerNameFontSize(12)">Font Size: 12pt</p>
+          <input type="range" min="0" max="128" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize(this.value)">
         </div>
       </div>
     </div>
 
+    <p style="margin:0; margin-left:20px; font-family:'Roboto', sans-serif; color:#EF5350;">*This resets all values and images stored in the scoreboard</p>
     <button id="reset-button" onclick="reloadPage()">Reset All</button>
   </div>
 
@@ -521,6 +611,7 @@ function updateRightImage(event) {
     var fileReader = new FileReader();
     fileReader.onload = function(event) {
       document.querySelector('#right-icon').src = event.target.result;
+
     }
     fileReader.readAsDataURL(selectedFile);
 }
@@ -544,80 +635,93 @@ function updateTextDisplayed(element) {
     }
 }
 
-function updateScoreboardPlacement(element) {
-  if (element.value === "Top") {
+function updateScoreboardPlacement(value) {
+  if (value === "Top") {
     document.getElementById("scoreboard").style.removeProperty('bottom');
     document.getElementById("scoreboard").style.setProperty('top', 0);
   }
-  else if (element.value === "Bottom") {
+  else if (value === "Bottom") {
     document.getElementById("scoreboard").style.removeProperty('top');
     document.getElementById("scoreboard").style.setProperty('bottom', 0);
   }
 }
 
-function updateScoreboardScale() {
-  document.documentElement.style.setProperty('--scoreboard-scale', (document.getElementById('scoreboard-scale-slider').value / 100));
-  document.getElementById("scoreboard-scale-control").innerHTML = "Scale: " + (document.getElementById('scoreboard-scale-slider').value / 100);
+function updateScoreboardScale(value) {
+  document.documentElement.style.setProperty('--scoreboard-scale', value / 100);
+  document.getElementById("scoreboard-scale-control").innerHTML = "Scale: " + (value / 100);
+  document.getElementById("scoreboard-scale-slider").value = value;
 }
 
-function updateScoreboardWidth() {
-  document.documentElement.style.setProperty('--scoreboard-width', (document.getElementById('scoreboard-width-slider').value) + "%");
-  document.getElementById("scoreboard-width-control").innerHTML = "Width: " + (document.getElementById('scoreboard-width-slider').value + "%");
+function updateScoreboardWidth(value) {
+  document.documentElement.style.setProperty('--scoreboard-width', value + "%");
+  document.getElementById("scoreboard-width-control").innerHTML = "Width: " + value + "%";
+  document.getElementById("scoreboard-width-slider").value = value;
 }
 
-function updateScoreboardHeight() {
-  document.documentElement.style.setProperty('--scoreboard-height', (document.getElementById('scoreboard-height-slider').value) + "px");
-  document.getElementById("scoreboard-height-control").innerHTML = "Height: " + (document.getElementById('scoreboard-height-slider').value + "px");
+function updateScoreboardHeight(value) {
+  document.documentElement.style.setProperty('--scoreboard-height', value + "px");
+  document.getElementById("scoreboard-height-control").innerHTML = "Height: " + (value + "px");
+  document.getElementById("scoreboard-height-slider").value = value;
 }
 
-function updateScoreboardMargin() {
-  document.documentElement.style.setProperty('--scoreboard-vertical-margin', (document.getElementById('scoreboard-margin-slider').value) + "px");
-  document.getElementById("scoreboard-vertical-margin-control").innerHTML = "Margin: " + (document.getElementById('scoreboard-margin-slider').value + "px");
+function updateScoreboardMargin(value) {
+  document.documentElement.style.setProperty('--scoreboard-vertical-margin', value + "px");
+  document.getElementById("scoreboard-vertical-margin-control").innerHTML = "Vertical Margin: " + value + "px";
+  document.getElementById("scoreboard-margin-slider").value = value;
 }
 
-function updateScoreboardRadius() {
-  document.documentElement.style.setProperty('--scoreboard-corner-radius', (document.getElementById('scoreboard-radius-slider').value) + "px");
-  document.getElementById("scoreboard-radius-control").innerHTML = "Corner Radius: " + (document.getElementById('scoreboard-radius-slider').value + "px");
+function updateScoreboardRadius(value) {
+  document.documentElement.style.setProperty('--scoreboard-corner-radius', value + "px");
+  document.getElementById("scoreboard-radius-control").innerHTML = "Corner Radius: " + value + "px";
+  document.getElementById("scoreboard-radius-slider").value = value;
 }
 
-function updateCenterWidth() {
-  document.documentElement.style.setProperty('--center-width', (document.getElementById('center-width-slider').value) + "%");
-  document.getElementById("center-width-control").innerHTML = "Width: " + (document.getElementById('center-width-slider').value + "%");
+function updateCenterWidth(value) {
+  document.documentElement.style.setProperty('--center-width', value + "%");
+  document.getElementById("center-width-control").innerHTML = "Width: " + value + "%";
+  document.getElementById("center-width-slider").value = value;
 }
 
-function updateCenterScale() {
-  document.documentElement.style.setProperty('--center-scale', (document.getElementById('center-scale-slider').value / 100));
-  document.getElementById("center-scale-control").innerHTML = "Scale: " + (document.getElementById('center-scale-slider').value / 100);
+function updateCenterScale(value) {
+  document.documentElement.style.setProperty('--center-scale', value / 100);
+  document.getElementById("center-scale-control").innerHTML = "Scale: " + (value / 100);
+  document.getElementById("center-scale-slider").value = value;
 }
 
-function updateCenterRadius() {
-  document.documentElement.style.setProperty('--center-corner-radius', (document.getElementById('center-radius-slider').value) + "px");
-  document.getElementById("center-radius-control").innerHTML = "Corner Radius: " + (document.getElementById('center-radius-slider').value + "px");
+function updateCenterRadius(value) {
+  document.documentElement.style.setProperty('--center-corner-radius', value + "px");
+  document.getElementById("center-radius-control").innerHTML = "Corner Radius: " + value + "px";
+  document.getElementById("center-radius-slider").value = value;
 }
 
-function updateTitleFontSize() {
-  document.documentElement.style.setProperty('--title-font-size', (document.getElementById('title-font-size-slider').value) + "pt");
-  document.getElementById("title-font-size-control").innerHTML = "Font Size: " + (document.getElementById('title-font-size-slider').value + "pt");
+function updateTitleFontSize(value) {
+  document.documentElement.style.setProperty('--title-font-size', value + "pt");
+  document.getElementById("title-font-size-control").innerHTML = "Font Size: " + value + "pt";
+  document.getElementById("title-font-size-slider").value = value;
 }
 
-function updateCenterImageSize() {
-  document.documentElement.style.setProperty('--image-size', (document.getElementById('center-image-size-slider').value) + "px");
-  document.getElementById("center-image-size-control").innerHTML = "Image Size: " + (document.getElementById('center-image-size-slider').value + "px");
+function updateCenterImageSize(value) {
+  document.documentElement.style.setProperty('--image-size', value + "px");
+  document.getElementById("center-image-size-control").innerHTML = "Image Size: " + value + "px";
+  document.getElementById("center-image-size-slider").value = value;
 }
 
-function updateScoreFontSize() {
-  document.documentElement.style.setProperty('--score-font-size', (document.getElementById('score-font-size-slider').value) + "pt");
-  document.getElementById("score-font-size-control").innerHTML = "Font Size: " + (document.getElementById('score-font-size-slider').value + "pt");
+function updateScoreFontSize(value) {
+  document.documentElement.style.setProperty('--score-font-size', value + "pt");
+  document.getElementById("score-font-size-control").innerHTML = "Font Size: " + value + "pt";
+  document.getElementById("score-font-size-slider").value = value;
 }
 
-function updateIconSize() {
-  document.documentElement.style.setProperty('--icon-size', (document.getElementById('icon-size-slider').value) + "px");
-  document.getElementById("icon-size-control").innerHTML = "Image Size: " + (document.getElementById('icon-size-slider').value + "px");
+function updateIconSize(value) {
+  document.documentElement.style.setProperty('--icon-size', value + "px");
+  document.getElementById("icon-size-control").innerHTML = "Image Size: " + value + "px";
+  document.getElementById("icon-size-slider").value = value;
 }
 
-function updatePlayerNameFontSize() {
-  document.documentElement.style.setProperty('--player-name-font-size', (document.getElementById('player-name-font-size-slider').value) + "pt");
-  document.getElementById("player-name-font-size-control").innerHTML = "Font Size: " + (document.getElementById('player-name-font-size-slider').value + "pt");
+function updatePlayerNameFontSize(value) {
+  document.documentElement.style.setProperty('--player-name-font-size', value + "pt");
+  document.getElementById("player-name-font-size-control").innerHTML = "Font Size: " + value + "pt";
+  document.getElementById("player-name-font-size-slider").value = value;
 }
 
 function reloadPage() {
