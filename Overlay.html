@@ -16,7 +16,7 @@
     --scoreboard-scale: 1;
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
-    --scoreboard-top-margin: 5px;
+    --scoreboard-vertical-margin: 5px;
     --scoreboard-background: rgb(255,255,255,0.75);
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --scoreboard-border-width: 0px;
@@ -55,8 +55,10 @@
   }
 
   #scoreboard {
+    position: absolute;
     display: flex;
-    margin-top: calc(var(--scoreboard-top-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
+    margin-top: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
+    margin-bottom: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
     background-color: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
@@ -268,6 +270,7 @@
     font-size: 22pt;
     font-weight: bold;
     margin: 20px;
+    color: #212121;
   }
 
   #settings h2 {
@@ -278,6 +281,7 @@
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+    color: #212121;
   }
 
   .settings-module {
@@ -289,11 +293,12 @@
     margin: 20px;
     margin-top: 0;
     font-family: 'Roboto', sans-serif;
+    color: #212121;
     font-weight: normal;
   }
   .control {
     display: block;
-    margin: 5px;
+    margin: 10px;
     margin-bottom: 0;
   }
 
@@ -321,6 +326,10 @@
      box-shadow: inset 0px 0px 0px 2px #78909C;
    }
 
+   input[type=radio] {
+     background: #E0E0E0;
+   }
+
   </style>
 </head>
 
@@ -332,6 +341,11 @@
     <div class="settings-module" id="settings-Scoreboard">
       <h2>Scoreboard</h2>
       <div class="controls-container" id="scoreboard-controls">
+        <div class="control">
+          <p id="scoreboard-placement-control">Placement:</p>
+          <input type="radio" name="placement" value="Top" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this)" checked>Top<br>
+          <input type="radio" name="placement" value="Bottom" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this)">Bottom<br>
+        </div>
         <div class="control">
           <p id="scoreboard-scale-control">Scale: 1</p>
           <input type="range" min="0" max="500" value="100" class="slider" id="scoreboard-scale-slider" oninput="updateScoreboardScale()">
@@ -345,7 +359,7 @@
           <input type="range" min="0" max="500" value="60" class="slider" id="scoreboard-height-slider" oninput="updateScoreboardHeight()">
         </div>
         <div class="control">
-          <p id="scoreboard-top-margin-control">Margin: 5px</p>
+          <p id="scoreboard-vertical-margin-control">Margin: 5px</p>
           <input type="range" min="0" max="1000" value="5" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin()">
         </div>
         <div class="control">
@@ -372,7 +386,7 @@
         </div>
         <div class="control">
           <p id="title-font-size-control">Font Size: 9pt</p>
-          <input type="range" min="0" max="64" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize()">
+          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize()">
         </div>
         <div class="control">
           <p id="center-image-size-control">Image Size: 20px</p>
@@ -386,7 +400,7 @@
       <div class="controls-container" id="score-controls">
         <div class="control">
           <p id="score-font-size-control">Font Size: 16pt</p>
-          <input type="range" min="0" max="64" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize()">
+          <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize()">
         </div>
       </div>
     </div>
@@ -406,7 +420,7 @@
       <div class="controls-container" id="player-names-controls">
         <div class="control">
           <p id="player-name-font-size-control">Font Size: 12pt</p>
-          <input type="range" min="0" max="64" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize()">
+          <input type="range" min="0" max="128" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize()">
         </div>
       </div>
     </div>
@@ -453,6 +467,14 @@
 
 <!-- <script src="stretchy.js" async></script> -->
 <script>
+
+function displayMenu() {
+  if (document.getElementById("settings").style.display === "none") {
+    document.getElementById("settings").style.display = "block";
+  } else {
+    document.getElementById("settings").style.display = "none";
+  }
+}
 
 document.addEventListener('DOMContentLoaded',function() {
     document.querySelector('#left-icon-chooser').onchange=updateLeftImage;
@@ -503,12 +525,14 @@ function updateTextDisplayed(element) {
     }
 }
 
-
-function displayMenu() {
-  if (document.getElementById("settings").style.display === "none") {
-    document.getElementById("settings").style.display = "block";
-  } else {
-    document.getElementById("settings").style.display = "none";
+function updateScoreboardPlacement(element) {
+  if (element.value === "Top") {
+    document.getElementById("scoreboard").style.removeProperty('bottom');
+    document.getElementById("scoreboard").style.setProperty('top', 0);
+  }
+  else if (element.value === "Bottom") {
+    document.getElementById("scoreboard").style.removeProperty('top');
+    document.getElementById("scoreboard").style.setProperty('bottom', 0);
   }
 }
 
@@ -528,8 +552,8 @@ function updateScoreboardHeight() {
 }
 
 function updateScoreboardMargin() {
-  document.documentElement.style.setProperty('--scoreboard-top-margin', (document.getElementById('scoreboard-margin-slider').value) + "px");
-  document.getElementById("scoreboard-top-margin-control").innerHTML = "Margin: " + (document.getElementById('scoreboard-margin-slider').value + "px");
+  document.documentElement.style.setProperty('--scoreboard-vertical-margin', (document.getElementById('scoreboard-margin-slider').value) + "px");
+  document.getElementById("scoreboard-vertical-margin-control").innerHTML = "Margin: " + (document.getElementById('scoreboard-margin-slider').value + "px");
 }
 
 function updateScoreboardRadius() {
