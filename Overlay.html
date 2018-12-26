@@ -18,7 +18,11 @@
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
     --scoreboard-vertical-margin: 5px;
-    --scoreboard-background: rgba(255,255,255,0.75);
+    --scoreboard-background-red: 255;
+    --scoreboard-background-green: 255;
+    --scoreboard-background-blue: 255;
+    --scoreboard-background-alpha: 0.75;
+    --scoreboard-background: rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha));
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --scoreboard-border-width: 0px;
     --scoreboard-border-color: rgba(0,0,0,0.5);
@@ -64,7 +68,7 @@
     background-color: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
-    margin-left: calc(((100% - var(--scoreboard-width))/2) - var(--scoreboard-border-width));
+    margin-left: calc(((100% - var(--scoreboard-width))/2 - var(--scoreboard-border-width)));
     box-shadow: var(--scoreboard-shadow);
     font-family: var(--font-family);
     border-style: solid;
@@ -480,13 +484,28 @@
           <p id="scoreboard-radius-control" onclick="updateScoreboardRadius(0)">Corner Radius: 0px</p>
           <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius(this.value)">
         </div>
-        <!-- <div class="control">
-          <p id="scoreboard-theme-control" onclick="updateScoreboardTheme('light')">Theme:</p>
-          <select id="scoreboard-theme-selector" onchange="updateScoreboardTheme(this.value)">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div> -->
+      </div>
+    </div>
+
+    <div class="settings-module" id="settings-Scoreboard Color">
+      <h2>Scoreboard Color</h2>
+      <div class="controls-container" id="scoreboard-color-controls">
+        <div class="control">
+          <p id="scoreboard-color-red-control" onclick="updateScoreboardColorRed(255)">Red: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-red-slider" oninput="updateScoreboardColorRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-green-control" onclick="updateScoreboardColorGreen(255)">Green: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-green-slider" oninput="updateScoreboardColorGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-blue-control" onclick="updateScoreboardColorBlue(255)">Blue: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-blue-slider" oninput="updateScoreboardColorBlue(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-alpha-control" onclick="updateScoreboardColorAlpha(75)">Alpha: 0.75</p>
+          <input type="range" min="0" max="100" value="75" class="slider" id="scoreboard-color-alpha-slider" oninput="updateScoreboardColorAlpha(this.value)">
+        </div>
       </div>
     </div>
 
@@ -760,6 +779,30 @@ function updatePlayerNameFontSize(value) {
   document.documentElement.style.setProperty('--player-name-font-size', value + "pt");
   document.getElementById("player-name-font-size-control").innerHTML = "Font Size: " + value + "pt";
   document.getElementById("player-name-font-size-slider").value = value;
+}
+
+function updateScoreboardColorRed(value) {
+  document.documentElement.style.setProperty('--scoreboard-background-red', value);
+  document.getElementById("scoreboard-color-red-control").innerHTML = "Red: " + value;
+  document.getElementById("scoreboard-color-red-slider").value = value;
+}
+
+function updateScoreboardColorGreen(value) {
+  document.documentElement.style.setProperty('--scoreboard-background-green', value);
+  document.getElementById("scoreboard-color-green-control").innerHTML = "Green: " + value;
+  document.getElementById("scoreboard-color-green-slider").value = value;
+}
+
+function updateScoreboardColorBlue(value) {
+  document.documentElement.style.setProperty('--scoreboard-background-blue', value);
+  document.getElementById("scoreboard-color-blue-control").innerHTML = "Blue: " + value;
+  document.getElementById("scoreboard-color-blue-slider").value = value;
+}
+
+function updateScoreboardColorAlpha(value) {
+  document.documentElement.style.setProperty('--scoreboard-background-alpha', (value/100));
+  document.getElementById("scoreboard-color-alpha-control").innerHTML = "Alpha: " + (value/100);
+  document.getElementById("scoreboard-color-alpha-slider").value = value;
 }
 
 function reloadPage() {
