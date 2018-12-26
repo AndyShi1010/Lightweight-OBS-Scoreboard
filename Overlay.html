@@ -18,7 +18,7 @@
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
     --scoreboard-vertical-margin: 5px;
-    --scoreboard-background: rgb(255,255,255,0.75);
+    --scoreboard-background: rgba(255,255,255,0.75);
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --scoreboard-border-width: 0px;
     --scoreboard-border-color: rgba(0,0,0,0.5);
@@ -36,6 +36,7 @@
 
 
     /* Score Styles */
+    --score-horizontal-margin: 20px;
     --score-shadow: 0px 2px 6px rgba(0,0,0,0.5);
     --score-background: rgba(0,0,0,0.1);
     --score-text-color: rgb(255,255,255);
@@ -71,8 +72,9 @@
     border-width: var(--scoreboard-border-width);
     border-color: var(--scoreboard-border-color);
     transform: scale(var(--scoreboard-scale));
-    animation: slide-in-top 1s;
+    animation: slide-in-top 0.75s;
     animation-timing-function: ease;
+    transition: 0.25s;
   }
 
   @keyframes slide-in-top {
@@ -91,8 +93,8 @@
     padding-left: 10px;
     padding-right: 10px;
     align-self: center;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: var(--score-horizontal-margin);
+    margin-right: var(--score-horizontal-margin);
     border: solid 0px #000000;
     font-size: var(--score-font-size);
     font-family: var(--font-family);
@@ -100,6 +102,7 @@
     background: var(--score-background);
     color: var(--score-text-color);
     text-shadow: var(--score-shadow);
+    transition: 0.25s;
   }
 
   .player {
@@ -122,6 +125,7 @@
     font-family: var(--font-family);
     font-size: var(--player-name-font-size);
     color: var(--player-name-color);
+    transition: 0.25s;
   }
 
   :focus {
@@ -179,6 +183,7 @@
     max-width: var(--center-width);
     overflow: hidden;
     border-radius: var(--center-corner-radius);
+    transition: 0.25s;
 
   }
       #center-content-image {
@@ -206,6 +211,7 @@
         font-family: var(--font-family);
         color: var(--title-color);
         word-break: break-all;
+        transition: 0.25s;
       }
 
   #left-content, #right-content {
@@ -261,7 +267,7 @@
     width: 80%;
     margin-left: 10%;
     background: white;
-    position: fixed;
+    position: absolute;
     height: 70%;
     z-index: 5;
     opacity: 0.5;
@@ -270,7 +276,7 @@
     overflow: scroll;
   }
 
-  #settings:hover {
+  #settings:hover, #settings:focus {
     opacity: 1;
     box-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     border: 1px solid rgba(0,0,0,0);
@@ -306,6 +312,7 @@
     color: #212121;
     font-weight: normal;
     font-size: 12pt;
+    flex-wrap: wrap;
   }
   .control {
     display: block;
@@ -445,11 +452,11 @@
         <div class="control">
           <p id="scoreboard-placement-control" onclick="updateScoreboardPlacement('Top')">Placement:</p>
           <label class="radio-option">
-            <input type="radio" name="placement" value="Top" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this.value)" checked>Top<br>
+            <input type="radio" name="placement" value="Top" id="scoreboard-placement-radio-top" onclick="updateScoreboardPlacement(this.value)" checked>Top<br>
             <span class="check-radio"></span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="placement" value="Bottom" id="scoreboard-placement-radio" onclick="updateScoreboardPlacement(this.value)">Bottom<br>
+            <input type="radio" name="placement" value="Bottom" id="scoreboard-placement-radio-bottom" onclick="updateScoreboardPlacement(this.value)">Bottom<br>
             <span class="check-radio"></span>
           </label>
         </div>
@@ -473,6 +480,13 @@
           <p id="scoreboard-radius-control" onclick="updateScoreboardRadius(0)">Corner Radius: 0px</p>
           <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius(this.value)">
         </div>
+        <!-- <div class="control">
+          <p id="scoreboard-theme-control" onclick="updateScoreboardTheme('light')">Theme:</p>
+          <select id="scoreboard-theme-selector" onchange="updateScoreboardTheme(this.value)">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div> -->
       </div>
     </div>
 
@@ -509,6 +523,10 @@
           <p id="score-font-size-control" onclick="updateScoreFontSize(16)">Font Size: 16pt</p>
           <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize(this.value)">
         </div>
+        <div class="control">
+          <p id="score-horizontal-margin-control" onclick="updateScoreHorizontalMargin(20)">Horizontal Margin: 20px</p>
+          <input type="range" min="0" max="100" value="20" class="slider" id="score-horizontal-margin-slider" oninput="updateScoreHorizontalMargin(this.value)">
+        </div>
       </div>
     </div>
 
@@ -535,7 +553,6 @@
     <p style="margin:0; margin-left:20px; font-family:'Roboto', sans-serif; color:#EF5350;">*This resets all values and images stored in the scoreboard</p>
     <button id="reset-button" onclick="reloadPage()">Reset All</button>
   </div>
-
 
   <div id="scoreboard">
 
@@ -574,7 +591,6 @@
   </div>
 </body>
 
-<!-- <script src="stretchy.js" async></script> -->
 <script>
 
 function displayMenu() {
@@ -639,10 +655,14 @@ function updateScoreboardPlacement(value) {
   if (value === "Top") {
     document.getElementById("scoreboard").style.removeProperty('bottom');
     document.getElementById("scoreboard").style.setProperty('top', 0);
+    document.getElementById("scoreboard-placement-radio-top").checked = true;
+    document.getElementById("scoreboard-placement-radio-bottom").checked = false;
   }
   else if (value === "Bottom") {
     document.getElementById("scoreboard").style.removeProperty('top');
     document.getElementById("scoreboard").style.setProperty('bottom', 0);
+    document.getElementById("scoreboard-placement-radio-bottom").checked = true;
+    document.getElementById("scoreboard-placement-radio-top").checked = false;
   }
 }
 
@@ -674,6 +694,18 @@ function updateScoreboardRadius(value) {
   document.documentElement.style.setProperty('--scoreboard-corner-radius', value + "px");
   document.getElementById("scoreboard-radius-control").innerHTML = "Corner Radius: " + value + "px";
   document.getElementById("scoreboard-radius-slider").value = value;
+}
+
+function updateScoreboardTheme(value) {
+  if (value == "light") {
+    document.documentElement.style.setProperty('--scoreboard-background', "rgba(255,255,255,0.75)");
+    document.documentElement.style.setProperty('--score-background', "rgba(0,0,0,0.1)");
+    document.documentElement.style.setProperty('--player-name-color', "rgb(0,0,0)");
+  } else {
+    document.documentElement.style.setProperty('--scoreboard-background', "rgba(0,0,0,0.75)");
+    document.documentElement.style.setProperty('--score-background', "rgba(255,255,255,0.1)");
+    document.documentElement.style.setProperty('--player-name-color', "rgb(255,255,255)");
+  }
 }
 
 function updateCenterWidth(value) {
@@ -710,6 +742,12 @@ function updateScoreFontSize(value) {
   document.documentElement.style.setProperty('--score-font-size', value + "pt");
   document.getElementById("score-font-size-control").innerHTML = "Font Size: " + value + "pt";
   document.getElementById("score-font-size-slider").value = value;
+}
+
+function updateScoreHorizontalMargin(value) {
+  document.documentElement.style.setProperty('--score-horizontal-margin', value + "px");
+  document.getElementById("score-horizontal-margin-control").innerHTML = "Horizontal Margin: " + value + "px";
+  document.getElementById("score-horizontal-margin-slider").value = value;
 }
 
 function updateIconSize(value) {
