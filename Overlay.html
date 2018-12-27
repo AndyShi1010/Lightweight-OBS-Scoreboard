@@ -29,6 +29,10 @@
     --scoreboard-corner-radius: 0px;
 
     /* Center Styles */
+    --center-background-red: 0;
+    --center-background-green: 0;
+    --center-background-blue: 0;
+    --center-background-alpha: 0;
     --center-background: linear-gradient(to bottom right, #FF405F, #4091FF);
     --center-width: 20%;
     --center-scale: 1;
@@ -65,7 +69,7 @@
     display: flex;
     margin-top: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
     margin-bottom: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
-    background-color: var(--scoreboard-background);
+    background: var(--scoreboard-background);
     width: var(--scoreboard-width);
     height: var(--scoreboard-height);
     margin-left: calc(((100% - var(--scoreboard-width))/2 - var(--scoreboard-border-width)));
@@ -427,7 +431,7 @@
    #reset-button {
      margin: 20px;
      height: 40px;
-     width: 140px;
+     width: 200px;
      background: #EF5350;
      border: 2px solid #EF5350;
      color: white;
@@ -491,6 +495,10 @@
       <h2>Scoreboard Color</h2>
       <div class="controls-container" id="scoreboard-color-controls">
         <div class="control">
+          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Background Style: </p>
+          <input type="text" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+        </div>
+        <div class="control">
           <p id="scoreboard-color-red-control" onclick="updateScoreboardColorRed(255)">Red: 255</p>
           <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-red-slider" oninput="updateScoreboardColorRed(this.value)">
         </div>
@@ -535,6 +543,32 @@
       </div>
     </div>
 
+    <div class="settings-module" id="settings-Scoreboard Center Color">
+      <h2>Scoreboard Center Color</h2>
+      <div class="controls-container" id="center-color-controls">
+        <div class="control">
+          <p id="center-background-control" onclick="updateCenterBackground('')">Background Style: </p>
+          <input type="text" placeholder="CSS" onkeydown="updateCenterBackground(this.value)">
+        </div>
+        <div class="control">
+          <p id="center-color-red-control" onclick="updateCenterColorRed(0)">Red: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-red-slider" oninput="updateCenterColorRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="center-color-green-control" onclick="updateCenterColorGreen(0)">Green: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-green-slider" oninput="updateCenterColorGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="center-color-blue-control" onclick="updateCenterColorBlue(0)">Blue: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-blue-slider" oninput="updateCenterColorBlue(this.value)">
+        </div>
+        <div class="control">
+          <p id="center-color-alpha-control" onclick="updateCenterColorAlpha(0)">Alpha: 0</p>
+          <input type="range" min="0" max="100" value="0" class="slider" id="center-color-alpha-slider" oninput="updateCenterColorAlpha(this.value)">
+        </div>
+      </div>
+    </div>
+
     <div class="settings-module" id="settings-Score">
       <h2>Score</h2>
       <div class="controls-container" id="score-controls">
@@ -570,7 +604,7 @@
     </div>
 
     <p style="margin:0; margin-left:20px; font-family:'Roboto', sans-serif; color:#EF5350;">*This resets all values and images stored in the scoreboard</p>
-    <button id="reset-button" onclick="reloadPage()">Reset All</button>
+    <button id="reset-button" onclick="reloadPage()">Reset All/Refresh</button>
   </div>
 
   <div id="scoreboard">
@@ -715,18 +749,6 @@ function updateScoreboardRadius(value) {
   document.getElementById("scoreboard-radius-slider").value = value;
 }
 
-function updateScoreboardTheme(value) {
-  if (value == "light") {
-    document.documentElement.style.setProperty('--scoreboard-background', "rgba(255,255,255,0.75)");
-    document.documentElement.style.setProperty('--score-background', "rgba(0,0,0,0.1)");
-    document.documentElement.style.setProperty('--player-name-color', "rgb(0,0,0)");
-  } else {
-    document.documentElement.style.setProperty('--scoreboard-background', "rgba(0,0,0,0.75)");
-    document.documentElement.style.setProperty('--score-background', "rgba(255,255,255,0.1)");
-    document.documentElement.style.setProperty('--player-name-color', "rgb(255,255,255)");
-  }
-}
-
 function updateCenterWidth(value) {
   document.documentElement.style.setProperty('--center-width', value + "%");
   document.getElementById("center-width-control").innerHTML = "Width: " + value + "%";
@@ -781,28 +803,91 @@ function updatePlayerNameFontSize(value) {
   document.getElementById("player-name-font-size-slider").value = value;
 }
 
+function updateScoreboardBackground(value){
+    if(event.key === 'Enter') {
+      updateScoreboardColorRed(255);
+      updateScoreboardColorGreen(255);
+      updateScoreboardColorBlue(255);
+      updateScoreboardColorAlpha(75);
+      document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
+      document.documentElement.style.setProperty('--scoreboard-background', value);
+    }
+    else if(event.key === 'Enter' && value === '') {
+      document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
+    }
+    else if (value === '') {
+      updateScoreboardColorRed(255);
+      updateScoreboardColorGreen(255);
+      updateScoreboardColorBlue(255);
+      updateScoreboardColorAlpha(75);
+      document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
+    }
+}
+
 function updateScoreboardColorRed(value) {
+  document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
   document.documentElement.style.setProperty('--scoreboard-background-red', value);
   document.getElementById("scoreboard-color-red-control").innerHTML = "Red: " + value;
   document.getElementById("scoreboard-color-red-slider").value = value;
 }
 
 function updateScoreboardColorGreen(value) {
+  document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
   document.documentElement.style.setProperty('--scoreboard-background-green', value);
   document.getElementById("scoreboard-color-green-control").innerHTML = "Green: " + value;
   document.getElementById("scoreboard-color-green-slider").value = value;
 }
 
 function updateScoreboardColorBlue(value) {
+  document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
   document.documentElement.style.setProperty('--scoreboard-background-blue', value);
   document.getElementById("scoreboard-color-blue-control").innerHTML = "Blue: " + value;
   document.getElementById("scoreboard-color-blue-slider").value = value;
 }
 
 function updateScoreboardColorAlpha(value) {
+  document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
   document.documentElement.style.setProperty('--scoreboard-background-alpha', (value/100));
   document.getElementById("scoreboard-color-alpha-control").innerHTML = "Alpha: " + (value/100);
   document.getElementById("scoreboard-color-alpha-slider").value = value;
+}
+
+function updateCenterBackground(value){
+  if (value === '') {
+    document.documentElement.style.setProperty('--center-background', "linear-gradient(to bottom right, #FF405F, #4091FF)");
+  }
+    if(event.key === 'Enter') {
+      document.documentElement.style.setProperty('--center-background', value);
+    }
+
+}
+
+function updateCenterColorRed(value) {
+  document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+  document.documentElement.style.setProperty('--center-background-red', value);
+  document.getElementById("center-color-red-control").innerHTML = "Red: " + value;
+  document.getElementById("center-color-red-slider").value = value;
+}
+
+function updateCenterColorGreen(value) {
+  document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+  document.documentElement.style.setProperty('--center-background-green', value);
+  document.getElementById("center-color-green-control").innerHTML = "Green: " + value;
+  document.getElementById("center-color-green-slider").value = value;
+}
+
+function updateCenterColorBlue(value) {
+  document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+  document.documentElement.style.setProperty('--center-background-blue', value);
+  document.getElementById("center-color-blue-control").innerHTML = "Blue: " + value;
+  document.getElementById("center-color-blue-slider").value = value;
+}
+
+function updateCenterColorAlpha(value) {
+  document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+  document.documentElement.style.setProperty('--center-background-alpha', (value/100));
+  document.getElementById("center-color-alpha-control").innerHTML = "Alpha: " + (value/100);
+  document.getElementById("center-color-alpha-slider").value = value;
 }
 
 function reloadPage() {
