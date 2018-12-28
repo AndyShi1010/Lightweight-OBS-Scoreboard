@@ -29,17 +29,20 @@
     --scoreboard-corner-radius: 0px;
 
     /* Center Styles */
-    --center-background-red: 0;
-    --center-background-green: 0;
-    --center-background-blue: 0;
-    --center-background-alpha: 0;
-    --center-background: linear-gradient(to bottom right, #FF405F, #4091FF);
+    --center-background-red: 255;
+    --center-background-green: 255;
+    --center-background-blue: 255;
+    --center-background-alpha: 1;
+    --center-background: rgba(255,255,255,1);
     --center-width: 20%;
     --center-scale: 1;
     --center-corner-radius: 0px;
     --center-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --title-font-size: 9pt;
-    --title-color: rgb(255,255,255);
+    --title-color-red: 0;
+    --title-color-green: 0;
+    --title-color-blue: 0;
+    --title-color: rgb(var(--title-color-red),var(--title-color-green),var(--title-color-blue));
     --image-size: 20px;
 
 
@@ -384,6 +387,17 @@
      background: #E0E0E0;
    }
 
+   input[type=text] {
+     border: 2px solid #E0E0E0;
+     padding: 5px;
+     transition: 0.25s;
+     font-family: 'Roboto', sans-serif;
+   }
+
+   input[type=text]:focus {
+     border: 2px solid #78909C;
+   }
+
    .radio-option {
      display: block;
      position: relative;
@@ -492,11 +506,11 @@
     </div>
 
     <div class="settings-module" id="settings-Scoreboard Color">
-      <h2>Scoreboard Color</h2>
+      <h2>Scoreboard Background</h2>
       <div class="controls-container" id="scoreboard-color-controls">
         <div class="control">
           <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Background Style: </p>
-          <input type="text" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+          <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
         </div>
         <div class="control">
           <p id="scoreboard-color-red-control" onclick="updateScoreboardColorRed(255)">Red: 255</p>
@@ -513,6 +527,17 @@
         <div class="control">
           <p id="scoreboard-color-alpha-control" onclick="updateScoreboardColorAlpha(75)">Alpha: 0.75</p>
           <input type="range" min="0" max="100" value="75" class="slider" id="scoreboard-color-alpha-slider" oninput="updateScoreboardColorAlpha(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
+          <label class="radio-option">
+            <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>On<br>
+            <span class="check-radio"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">Off<br>
+            <span class="check-radio"></span>
+          </label>
         </div>
       </div>
     </div>
@@ -533,10 +558,6 @@
           <input type="range" min="0" max="200" value="0" class="slider" id="center-radius-slider" oninput="updateCenterRadius(this.value)">
         </div>
         <div class="control">
-          <p id="title-font-size-control" onclick="updateTitleFontSize(9)">Font Size: 9pt</p>
-          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize(this.value)">
-        </div>
-        <div class="control">
           <p id="center-image-size-control" onclick="updateCenterImageSize(20)">Image Size: 20px</p>
           <input type="range" min="0" max="200" value="20" class="slider" id="center-image-size-slider" oninput="updateCenterImageSize(this.value)">
         </div>
@@ -544,27 +565,60 @@
     </div>
 
     <div class="settings-module" id="settings-Scoreboard Center Color">
-      <h2>Scoreboard Center Color</h2>
+      <h2>Scoreboard Center Background</h2>
       <div class="controls-container" id="center-color-controls">
         <div class="control">
           <p id="center-background-control" onclick="updateCenterBackground('')">Background Style: </p>
-          <input type="text" placeholder="CSS" onkeydown="updateCenterBackground(this.value)">
+          <input type="text" id="center-background-textbox" placeholder="CSS" onkeydown="updateCenterBackground(this.value)">
         </div>
         <div class="control">
-          <p id="center-color-red-control" onclick="updateCenterColorRed(0)">Red: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-red-slider" oninput="updateCenterColorRed(this.value)">
+          <p id="center-color-red-control" onclick="updateCenterColorRed(255)">Red: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="center-color-red-slider" oninput="updateCenterColorRed(this.value)">
         </div>
         <div class="control">
-          <p id="center-color-green-control" onclick="updateCenterColorGreen(0)">Green: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-green-slider" oninput="updateCenterColorGreen(this.value)">
+          <p id="center-color-green-control" onclick="updateCenterColorGreen(255)">Green: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="center-color-green-slider" oninput="updateCenterColorGreen(this.value)">
         </div>
         <div class="control">
-          <p id="center-color-blue-control" onclick="updateCenterColorBlue(0)">Blue: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="center-color-blue-slider" oninput="updateCenterColorBlue(this.value)">
+          <p id="center-color-blue-control" onclick="updateCenterColorBlue(255)">Blue: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="center-color-blue-slider" oninput="updateCenterColorBlue(this.value)">
         </div>
         <div class="control">
-          <p id="center-color-alpha-control" onclick="updateCenterColorAlpha(0)">Alpha: 0</p>
-          <input type="range" min="0" max="100" value="0" class="slider" id="center-color-alpha-slider" oninput="updateCenterColorAlpha(this.value)">
+          <p id="center-color-alpha-control" onclick="updateCenterColorAlpha(100)">Alpha: 1.0</p>
+          <input type="range" min="0" max="100" value="100" class="slider" id="center-color-alpha-slider" oninput="updateCenterColorAlpha(this.value)">
+        </div>
+        <div class="control">
+          <p id="center-shadow-control" onclick="updateCenterShadow('On')">Shadow:</p>
+          <label class="radio-option">
+            <input type="radio" name="center-shadow" value="On" id="center-shadow-radio-on" onclick="updateCenterShadow(this.value)" checked>On<br>
+            <span class="check-radio"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="center-shadow" value="Off" id="center-shadow-radio-off" onclick="updateCenterShadow(this.value)">Off<br>
+            <span class="check-radio"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-module" id="settings-Title">
+      <h2>Title</h2>
+      <div class="controls-container" id="title-controls">
+        <div class="control">
+          <p id="title-font-size-control" onclick="updateTitleFontSize(9)">Font Size: 9pt</p>
+          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-red-control" onclick="updateTitleColorRed(0)">Red: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-red-slider" oninput="updateTitleColorRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-green-control" onclick="updateTitleColorGreen(0)">Green: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-green-slider" oninput="updateTitleColorGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-blue-control" onclick="updateTitleColorBlue(0)">Blue: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-blue-slider" oninput="updateTitleColorBlue(this.value)">
         </div>
       </div>
     </div>
@@ -805,21 +859,14 @@ function updatePlayerNameFontSize(value) {
 
 function updateScoreboardBackground(value){
     if(event.key === 'Enter') {
-      updateScoreboardColorRed(255);
-      updateScoreboardColorGreen(255);
-      updateScoreboardColorBlue(255);
-      updateScoreboardColorAlpha(75);
-      document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
+      // document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
       document.documentElement.style.setProperty('--scoreboard-background', value);
     }
     else if(event.key === 'Enter' && value === '') {
       document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
     }
     else if (value === '') {
-      updateScoreboardColorRed(255);
-      updateScoreboardColorGreen(255);
-      updateScoreboardColorBlue(255);
-      updateScoreboardColorAlpha(75);
+      document.getElementById("scoreboard-background-textbox").value = value;
       document.documentElement.style.setProperty('--scoreboard-background', "rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha))");
     }
 }
@@ -852,14 +899,30 @@ function updateScoreboardColorAlpha(value) {
   document.getElementById("scoreboard-color-alpha-slider").value = value;
 }
 
-function updateCenterBackground(value){
-  if (value === '') {
-    document.documentElement.style.setProperty('--center-background', "linear-gradient(to bottom right, #FF405F, #4091FF)");
+function updateScoreboardShadow(value) {
+  if (value === "On") {
+    document.documentElement.style.setProperty('--scoreboard-shadow', "0px 5px 40px rgba(0,0,0,0.25)");
+    document.getElementById("scoreboard-shadow-radio-on").checked = true;
+    document.getElementById("scoreboard-shadow-radio-off").checked = false;
   }
+  else if (value === "Off") {
+    document.documentElement.style.setProperty('--scoreboard-shadow', "0px 0px 0px rgba(0,0,0,0)");
+    document.getElementById("scoreboard-shadow-radio-on").checked = false;
+    document.getElementById("scoreboard-shadow-radio-off").checked = true;
+  }
+}
+
+function updateCenterBackground(value){
     if(event.key === 'Enter') {
       document.documentElement.style.setProperty('--center-background', value);
     }
-
+    else if(event.key === 'Enter' && value === '') {
+      document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+    }
+    else if (value === '') {
+      document.getElementById("center-background-textbox").value = value;
+      document.documentElement.style.setProperty('--center-background', "rgba(var(--center-background-red),var(--center-background-green),var(--center-background-blue),var(--center-background-alpha))");
+    }
 }
 
 function updateCenterColorRed(value) {
@@ -888,6 +951,37 @@ function updateCenterColorAlpha(value) {
   document.documentElement.style.setProperty('--center-background-alpha', (value/100));
   document.getElementById("center-color-alpha-control").innerHTML = "Alpha: " + (value/100);
   document.getElementById("center-color-alpha-slider").value = value;
+}
+
+function updateCenterShadow(value) {
+  if (value === "On") {
+    document.documentElement.style.setProperty('--center-shadow', "0px 5px 40px rgba(0,0,0,0.25)");
+    document.getElementById("center-shadow-radio-on").checked = true;
+    document.getElementById("center-shadow-radio-off").checked = false;
+  }
+  else if (value === "Off") {
+    document.documentElement.style.setProperty('--center-shadow', "0px 0px 0px rgba(0,0,0,0)");
+    document.getElementById("center-shadow-radio-on").checked = false;
+    document.getElementById("center-shadow-radio-off").checked = true;
+  }
+}
+
+function updateTitleColorRed(value) {
+  document.documentElement.style.setProperty('--title-color-red', value);
+  document.getElementById("title-color-red-control").innerHTML = "Red: " + value;
+  document.getElementById("title-color-red-slider").value = value;
+}
+
+function updateTitleColorGreen(value) {
+  document.documentElement.style.setProperty('--title-color-green', value);
+  document.getElementById("title-color-green-control").innerHTML = "Green: " + value;
+  document.getElementById("title-color-green-slider").value = value;
+}
+
+function updateTitleColorBlue(value) {
+  document.documentElement.style.setProperty('--title-color-blue', value);
+  document.getElementById("title-color-blue-control").innerHTML = "Blue: " + value;
+  document.getElementById("title-color-blue-slider").value = value;
 }
 
 function reloadPage() {
