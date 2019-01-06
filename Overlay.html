@@ -17,7 +17,7 @@
     --scoreboard-scale: 1;
     --scoreboard-width: 60%;
     --scoreboard-height: 60px;
-    --scoreboard-vertical-margin: 5px;
+    --scoreboard-vertical-margin: 10px;
     --scoreboard-background-red: 255;
     --scoreboard-background-green: 255;
     --scoreboard-background-blue: 255;
@@ -52,6 +52,11 @@
     --score-background: rgba(0,0,0,0.1);
     --score-text-color: rgb(255,255,255);
     --score-font-size: 16pt;
+
+    /* Player Styles */
+    --player-padding: 5px;
+    --player-background: rgba(0,0,0,0.1);
+    --player-horizontal-margin: 10px;
 
     /* Icon Styles */
     --icon-size: 30px;
@@ -98,6 +103,7 @@
   }
 
   .score {
+    position: absolute;
     margin: 0;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -120,8 +126,10 @@
     display: flex;
     position: absolute;
     align-self: center;
-    margin-left: 10px;
-    margin-right: 10px;
+    padding: var(--player-padding);
+    margin-left: var(--player-horizontal-margin);
+    margin-right: var(--player-horizontal-margin);
+    background: var(--player-background);
   }
 
   .playername {
@@ -135,6 +143,7 @@
     font-weight: bold;
     font-family: var(--font-family);
     font-size: var(--player-name-font-size);
+    white-space: nowrap;
     color: var(--player-name-color);
     transition: 0.25s;
   }
@@ -148,21 +157,17 @@
     height: auto;
     right: 0;
     align-self: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
     background: var(--icon-background);
     height: var(--icon-size);
     max-height: var(--scoreboard-height);
     overflow: hidden;
+    transition: 0.25s;
   }
 
   .playericon {
     position: relative;
-    min-width: 20px;
-    min-height: 20px;
-    margin-left: 5px;
-    margin-right: 5px;
     overflow: hidden;
+    display: flex;
   }
 
   .image-chooser {
@@ -234,16 +239,14 @@
   }
 
     #left-content .score {
-      position: absolute;
       right: 0;
     }
 
-    #left-content .player {
+    /* #left-content .player {
       left: 0;
-    }
+    } */
 
     #right-content .score {
-      position: absolute;
       left: 0;
     }
 
@@ -273,7 +276,7 @@
     color: white;
   }
   /* Settings Panel Styles*/
-  #settings {
+  .panel {
     bottom: 15%;
     width: 80%;
     margin-left: 10%;
@@ -287,13 +290,29 @@
     overflow: scroll;
   }
 
-  #settings:hover, #settings:focus {
+  .panel:hover, .panel:focus {
     opacity: 1;
     box-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     border: 1px solid rgba(0,0,0,0);
   }
 
-  #settings h1{
+  .panel .heading {
+    display: flex;
+  }
+
+  .heading button {
+    margin: 20px;
+    background: white;
+    border: 0px;
+    transition: 0.25s;
+    cursor: pointer;
+  }
+
+  .heading button:hover {
+    background: #E0E0E0;
+  }
+
+  .panel h1{
     font-family: 'Roboto', sans-serif;
     font-size: 22pt;
     font-weight: bold;
@@ -301,7 +320,7 @@
     color: #212121;
   }
 
-  #settings h2 {
+  .panel h2 {
     font-family: 'Roboto', sans-serif;
     font-size: 16pt;
     font-weight: 500;
@@ -339,6 +358,7 @@
 
   .control p:hover {
     color: white;
+    user-select: none;
   }
 
   .control p:hover::before {
@@ -363,6 +383,11 @@
     -webkit-appearance: none;
     background: #E0E0E0;
     box-shadow: inset 0px 0px 0px 9px #ffffff;
+    transition: 0.25s;
+  }
+
+  input[type=range]:focus {
+    background: #B0BEC5;
   }
 
  input[type=range]::-webkit-slider-thumb {
@@ -442,6 +467,24 @@
      transform: scale(1);
    }
 
+   .control button {
+     margin-top: 20px;
+     margin-bottom: 20px;
+     height: 40px;
+     color: white;
+     font-family: 'Roboto', sans-serif;
+     font-size: 12pt;
+     padding: 10px;
+     transition: 0.25s;
+     background: #78909C;
+     border: 2px solid #78909C;
+   }
+
+   .control button:hover {
+     background: #ffffff;
+     color: #78909C;
+   }
+
    #reset-button {
      margin: 20px;
      height: 40px;
@@ -464,9 +507,9 @@
 </head>
 
 <body>
-  <button id="settings-toggle" onclick="displayMenu()">🛠 Settings</button>
+  <button id="settings-toggle" onclick="displaySettings()">🛠 Settings</button>
 
-  <div id="settings" style="display: none;">
+  <div class="panel" id="settings" style="display: none;">
     <h1>🛠 Settings</h1>
     <div class="settings-module" id="settings-Scoreboard">
       <h2>Scoreboard</h2>
@@ -495,49 +538,11 @@
           <input type="range" min="0" max="500" value="60" class="slider" id="scoreboard-height-slider" oninput="updateScoreboardHeight(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(5)">Vertical Margin: 5px</p>
-          <input type="range" min="0" max="1000" value="5" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
+          <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Vertical Margin: 10px</p>
+          <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-radius-control" onclick="updateScoreboardRadius(0)">Corner Radius: 0px</p>
-          <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-module" id="settings-Scoreboard Color">
-      <h2>Scoreboard Background</h2>
-      <div class="controls-container" id="scoreboard-color-controls">
-        <div class="control">
-          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Background Style: </p>
-          <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
-        </div>
-        <div class="control">
-          <p id="scoreboard-color-red-control" onclick="updateScoreboardColorRed(255)">Red: 255</p>
-          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-red-slider" oninput="updateScoreboardColorRed(this.value)">
-        </div>
-        <div class="control">
-          <p id="scoreboard-color-green-control" onclick="updateScoreboardColorGreen(255)">Green: 255</p>
-          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-green-slider" oninput="updateScoreboardColorGreen(this.value)">
-        </div>
-        <div class="control">
-          <p id="scoreboard-color-blue-control" onclick="updateScoreboardColorBlue(255)">Blue: 255</p>
-          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-blue-slider" oninput="updateScoreboardColorBlue(this.value)">
-        </div>
-        <div class="control">
-          <p id="scoreboard-color-alpha-control" onclick="updateScoreboardColorAlpha(75)">Alpha: 0.75</p>
-          <input type="range" min="0" max="100" value="75" class="slider" id="scoreboard-color-alpha-slider" oninput="updateScoreboardColorAlpha(this.value)">
-        </div>
-        <div class="control">
-          <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
-          <label class="radio-option">
-            <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>On<br>
-            <span class="check-radio"></span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">Off<br>
-            <span class="check-radio"></span>
-          </label>
+          <button id="scoreboard-style-button" onclick="displayScoreboardStyleSettings(); displaySettings();">Style Settings</button>
         </div>
       </div>
     </div>
@@ -561,9 +566,131 @@
           <p id="center-image-size-control" onclick="updateCenterImageSize(20)">Image Size: 20px</p>
           <input type="range" min="0" max="200" value="20" class="slider" id="center-image-size-slider" oninput="updateCenterImageSize(this.value)">
         </div>
+        <div class="control">
+          <button id="center-style-button" onclick="displayCenterStyleSettings(); displaySettings();">Style Settings</button>
+        </div>
       </div>
     </div>
 
+    <div class="settings-module" id="settings-Title">
+      <h2>Title</h2>
+      <div class="controls-container" id="title-controls">
+        <div class="control">
+          <p id="title-font-size-control" onclick="updateTitleFontSize(9)">Font Size: 9pt</p>
+          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-red-control" onclick="updateTitleColorRed(0)">Red: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-red-slider" oninput="updateTitleColorRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-green-control" onclick="updateTitleColorGreen(0)">Green: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-green-slider" oninput="updateTitleColorGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="title-color-blue-control" onclick="updateTitleColorBlue(0)">Blue: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-blue-slider" oninput="updateTitleColorBlue(this.value)">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-module" id="settings-Score">
+      <h2>Score</h2>
+      <div class="controls-container" id="score-controls">
+        <div class="control">
+          <p id="score-horizontal-margin-control" onclick="updateScoreHorizontalMargin(20)">Horizontal Margin: 20px</p>
+          <input type="range" min="0" max="300" value="20" class="slider" id="score-horizontal-margin-slider" oninput="updateScoreHorizontalMargin(this.value)">
+        </div>
+        <div class="control">
+          <p id="score-font-size-control" onclick="updateScoreFontSize(16)">Font Size: 16pt</p>
+          <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize(this.value)">
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-module"id="settings-Player">
+      <h2>Player</h2>
+      <div class="controls-container" id="player-names-controls">
+        <div class="control">
+          <p id="player-horizontal-margin-control" onclick="updatePlayerHorizontalMargin(10)">Horizontal Margin: 10px</p>
+          <input type="range" min="0" max="300" value="10" class="slider" id="player-horizontal-margin-slider" oninput="updatePlayerHorizontalMargin(this.value)">
+        </div>
+        <div class="control">
+          <p id="player-padding-control" onclick="updatePlayerPadding(5)">Padding: 5px</p>
+          <input type="range" min="0" max="50" value="5" class="slider" id="player-padding-slider" oninput="updatePlayerPadding(this.value)">
+        </div>
+        <div class="control">
+          <p id="player-name-font-size-control" onclick="updatePlayerNameFontSize(12)">Font Size: 12pt</p>
+          <input type="range" min="0" max="128" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize(this.value)">
+        </div>
+        <div class="control">
+          <p id="icon-size-control" onclick="updateIconSize(30)">Image Size: 30px</p>
+          <input type="range" min="0" max="500" value="30" class="slider" id="icon-size-slider" oninput="updateIconSize(this.value)">
+        </div>
+      </div>
+    </div>
+
+    <p style="margin:0; margin-left:20px; font-family:'Roboto', sans-serif; color:#EF5350;">*This resets all values and images stored in the scoreboard</p>
+    <button id="reset-button" onclick="reloadPage()">Reset All/Refresh</button>
+  </div>
+
+  <div class="panel" id="scoreboard-style-settings" style="display: none;">
+    <div class="heading">
+      <button onclick="displayScoreboardStyleSettings(); displaySettings();">Back</button>
+      <h1>Scoreboard Style</h1>
+    </div>
+    <div class="settings-module" id="settings-Scoreboard Style">
+      <h2>General</h2>
+      <div class="controls-container" id="scoreboard-style-controls">
+        <div class="control">
+          <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
+          <label class="radio-option">
+            <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>On<br>
+            <span class="check-radio"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">Off<br>
+            <span class="check-radio"></span>
+          </label>
+        </div>
+        <div class="control">
+          <p id="scoreboard-radius-control" onclick="updateScoreboardRadius(0)">Corner Radius: 0px</p>
+          <input type="range" min="0" max="200" value="0" class="slider" id="scoreboard-radius-slider" oninput="updateScoreboardRadius(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="settings-module" id="settings-Scoreboard Background">
+      <h2>Background</h2>
+      <div class="controls-container" id="scoreboard-background-controls">
+        <div class="control">
+          <p id="scoreboard-color-red-control" onclick="updateScoreboardColorRed(255)">Red: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-red-slider" oninput="updateScoreboardColorRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-green-control" onclick="updateScoreboardColorGreen(255)">Green: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-green-slider" oninput="updateScoreboardColorGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-blue-control" onclick="updateScoreboardColorBlue(255)">Blue: 255</p>
+          <input type="range" min="0" max="255" value="255" class="slider" id="scoreboard-color-blue-slider" oninput="updateScoreboardColorBlue(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-color-alpha-control" onclick="updateScoreboardColorAlpha(75)">Alpha: 0.75</p>
+          <input type="range" min="0" max="100" value="75" class="slider" id="scoreboard-color-alpha-slider" oninput="updateScoreboardColorAlpha(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">CSS Override: </p>
+          <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="center-style-settings" style="display: none;">
+    <div class="heading">
+      <button onclick="displayCenterStyleSettings(); displaySettings();">Back</button>
+      <h1>Scoreboard Center Style</h1>
+    </div>
     <div class="settings-module" id="settings-Scoreboard Center Color">
       <h2>Scoreboard Center Background</h2>
       <div class="controls-container" id="center-color-controls">
@@ -600,80 +727,19 @@
         </div>
       </div>
     </div>
-
-    <div class="settings-module" id="settings-Title">
-      <h2>Title</h2>
-      <div class="controls-container" id="title-controls">
-        <div class="control">
-          <p id="title-font-size-control" onclick="updateTitleFontSize(9)">Font Size: 9pt</p>
-          <input type="range" min="0" max="128" value="9" class="slider" id="title-font-size-slider" oninput="updateTitleFontSize(this.value)">
-        </div>
-        <div class="control">
-          <p id="title-color-red-control" onclick="updateTitleColorRed(0)">Red: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-red-slider" oninput="updateTitleColorRed(this.value)">
-        </div>
-        <div class="control">
-          <p id="title-color-green-control" onclick="updateTitleColorGreen(0)">Green: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-green-slider" oninput="updateTitleColorGreen(this.value)">
-        </div>
-        <div class="control">
-          <p id="title-color-blue-control" onclick="updateTitleColorBlue(0)">Blue: 0</p>
-          <input type="range" min="0" max="255" value="0" class="slider" id="title-color-blue-slider" oninput="updateTitleColorBlue(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-module" id="settings-Score">
-      <h2>Score</h2>
-      <div class="controls-container" id="score-controls">
-        <div class="control">
-          <p id="score-font-size-control" onclick="updateScoreFontSize(16)">Font Size: 16pt</p>
-          <input type="range" min="0" max="128" value="16" class="slider" id="score-font-size-slider" oninput="updateScoreFontSize(this.value)">
-        </div>
-        <div class="control">
-          <p id="score-horizontal-margin-control" onclick="updateScoreHorizontalMargin(20)">Horizontal Margin: 20px</p>
-          <input type="range" min="0" max="100" value="20" class="slider" id="score-horizontal-margin-slider" oninput="updateScoreHorizontalMargin(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-module" id="settings-Icons">
-      <h2>Icons</h2>
-      <div class="controls-container" id="icons-controls">
-        <div class="control">
-          <p id="icon-size-control" onclick="updateIconSize(30)">Image Size: 30px</p>
-          <input type="range" min="0" max="500" value="30" class="slider" id="icon-size-slider" oninput="updateIconSize(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <div class="settings-module"id="settings-Player Names">
-      <h2>Player Names</h2>
-      <div class="controls-container" id="player-names-controls">
-        <div class="control">
-          <p id="player-name-font-size-control" onclick="updatePlayerNameFontSize(12)">Font Size: 12pt</p>
-          <input type="range" min="0" max="128" value="12" class="slider" id="player-name-font-size-slider" oninput="updatePlayerNameFontSize(this.value)">
-        </div>
-      </div>
-    </div>
-
-    <p style="margin:0; margin-left:20px; font-family:'Roboto', sans-serif; color:#EF5350;">*This resets all values and images stored in the scoreboard</p>
-    <button id="reset-button" onclick="reloadPage()">Reset All/Refresh</button>
   </div>
 
   <div id="scoreboard">
 
     <div id="left-content">
-        <div class="player">
-          <div class="playericon">
-            <input type="file" class="image-chooser" id="left-icon-chooser" accept="image/*">
-            <img class="icon" id="left-icon" src="assets/file.png">
-          </div>
-          <p class="playername" onclick="updateTextDisplayed(this)">Player One</p>
-          <!-- <input class="playername" type="text" value="Player Name" placeholder="_" onfocus="this.select();" spellcheck="false"> -->
+      <div class="player">
+        <div class="playericon">
+          <input type="file" class="image-chooser" id="left-icon-chooser" accept="image/*">
+          <img class="icon" id="left-icon" src="assets/file.png">
         </div>
-          <p class="score" id="player-one-score" onclick="updateTextDisplayed(this)">0</p>
-        <!-- <input class="score" type="text" value="0" placeholder="0" onfocus="this.select();" spellcheck="false"> -->
+        <p class="playername" onclick="updateTextDisplayed(this)">Player One</p>
+      </div>
+      <p class="score" id="player-one-score" onclick="updateTextDisplayed(this)">0</p>
     </div>
 
     <div id="center-content">
@@ -700,11 +766,27 @@
 
 <script>
 
-function displayMenu() {
+function displaySettings() {
   if (document.getElementById("settings").style.display === "none") {
     document.getElementById("settings").style.display = "block";
   } else {
     document.getElementById("settings").style.display = "none";
+  }
+}
+
+function displayScoreboardStyleSettings() {
+  if (document.getElementById("scoreboard-style-settings").style.display === "none") {
+    document.getElementById("scoreboard-style-settings").style.display = "block";
+  } else {
+    document.getElementById("scoreboard-style-settings").style.display = "none";
+  }
+}
+
+function displayCenterStyleSettings() {
+  if (document.getElementById("center-style-settings").style.display === "none") {
+    document.getElementById("center-style-settings").style.display = "block";
+  } else {
+    document.getElementById("center-style-settings").style.display = "none";
   }
 }
 
@@ -843,6 +925,18 @@ function updateScoreHorizontalMargin(value) {
   document.documentElement.style.setProperty('--score-horizontal-margin', value + "px");
   document.getElementById("score-horizontal-margin-control").innerHTML = "Horizontal Margin: " + value + "px";
   document.getElementById("score-horizontal-margin-slider").value = value;
+}
+
+function updatePlayerHorizontalMargin(value) {
+  document.documentElement.style.setProperty('--player-horizontal-margin', value + "px");
+  document.getElementById("player-horizontal-margin-control").innerHTML = "Horizontal Margin: " + value + "px";
+  document.getElementById("player-horizontal-margin-slider").value = value;
+}
+
+function updatePlayerPadding(value) {
+  document.documentElement.style.setProperty('--player-padding', value + "px");
+  document.getElementById("player-padding-control").innerHTML = "Padding: " + value + "px";
+  document.getElementById("player-padding-slider").value = value;
 }
 
 function updateIconSize(value) {
