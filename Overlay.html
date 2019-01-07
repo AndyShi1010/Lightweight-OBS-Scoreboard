@@ -25,7 +25,11 @@
     --scoreboard-background: rgba(var(--scoreboard-background-red),var(--scoreboard-background-green),var(--scoreboard-background-blue),var(--scoreboard-background-alpha));
     --scoreboard-shadow: 0px 5px 40px rgba(0,0,0,0.25);
     --scoreboard-border-width: 0px;
-    --scoreboard-border-color: rgba(0,0,0,0.5);
+    --scoreboard-border-red: 0;
+    --scoreboard-border-green: 0;
+    --scoreboard-border-blue: 0;
+    --scoreboard-border-alpha: 1;
+    --scoreboard-border: rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha));
     --scoreboard-corner-radius: 0px;
 
     /* Center Styles */
@@ -86,7 +90,7 @@
     border-style: solid;
     border-radius: var(--scoreboard-corner-radius);
     border-width: var(--scoreboard-border-width);
-    border-color: var(--scoreboard-border-color);
+    border-color: var(--scoreboard-border);
     transform: scale(var(--scoreboard-scale));
     animation: slide-in-top 0.75s;
     animation-timing-function: ease;
@@ -215,6 +219,7 @@
         margin-left: auto;
         margin-right: auto;
         position: relative;
+        transition: 0.25s;
       }
 
       #title {
@@ -298,6 +303,7 @@
 
   .panel .heading {
     display: flex;
+    align-items: center;
   }
 
   .heading button {
@@ -305,7 +311,11 @@
     background: white;
     border: 0px;
     transition: 0.25s;
+    line-height: 1.25;
+    font-size: 22pt;
     cursor: pointer;
+    transform: rotate(180deg);
+    margin-right: 0px;
   }
 
   .heading button:hover {
@@ -478,6 +488,7 @@
      transition: 0.25s;
      background: #78909C;
      border: 2px solid #78909C;
+     line-height: 0px;
    }
 
    .control button:hover {
@@ -559,10 +570,6 @@
           <input type="range" min="0" max="100" value="20" class="slider" id="center-width-slider" oninput="updateCenterWidth(this.value)">
         </div>
         <div class="control">
-          <p id="center-radius-control" onclick="updateCenterRadius(0)">Corner Radius: 0px</p>
-          <input type="range" min="0" max="200" value="0" class="slider" id="center-radius-slider" oninput="updateCenterRadius(this.value)">
-        </div>
-        <div class="control">
           <p id="center-image-size-control" onclick="updateCenterImageSize(20)">Image Size: 20px</p>
           <input type="range" min="0" max="200" value="20" class="slider" id="center-image-size-slider" oninput="updateCenterImageSize(this.value)">
         </div>
@@ -636,7 +643,7 @@
 
   <div class="panel" id="scoreboard-style-settings" style="display: none;">
     <div class="heading">
-      <button onclick="displayScoreboardStyleSettings(); displaySettings();">Back</button>
+      <button onclick="displayScoreboardStyleSettings(); displaySettings();">&#10140;</button>
       <h1>Scoreboard Style</h1>
     </div>
     <div class="settings-module" id="settings-Scoreboard Style">
@@ -679,8 +686,33 @@
           <input type="range" min="0" max="100" value="75" class="slider" id="scoreboard-color-alpha-slider" oninput="updateScoreboardColorAlpha(this.value)">
         </div>
         <div class="control">
-          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">CSS Override: </p>
+          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </p>
           <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="settings-module" id="settings-Scoreboard Border">
+      <h2>Border</h2>
+      <div class="controls-container" id="scoreboard-border-controls">
+        <div class="control">
+          <p id="scoreboard-border-width-control" onclick="updateScoreboardBorderWidth(0)">Width: 0px</p>
+          <input type="range" min="0" max="50" value="0" class="slider" id="scoreboard-border-width-slider" oninput="updateScoreboardBorderWidth(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-border-red-control" onclick="updateScoreboardBorderRed(0)">Red: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="scoreboard-border-red-slider" oninput="updateScoreboardBorderRed(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-border-green-control" onclick="updateScoreboardBorderGreen(0)">Green: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="scoreboard-border-green-slider" oninput="updateScoreboardBorderGreen(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-border-blue-control" onclick="updateScoreboardBorderBlue(0)">Blue: 0</p>
+          <input type="range" min="0" max="255" value="0" class="slider" id="scoreboard-border-blue-slider" oninput="updateScoreboardBorderBlue(this.value)">
+        </div>
+        <div class="control">
+          <p id="scoreboard-border-alpha-control" onclick="updateScoreboardBorderAlpha(100)">Alpha: 1</p>
+          <input type="range" min="0" max="100" value="100" class="slider" id="scoreboard-border-alpha-slider" oninput="updateScoreboardBorderAlpha(this.value)">
         </div>
       </div>
     </div>
@@ -688,16 +720,32 @@
 
   <div class="panel" id="center-style-settings" style="display: none;">
     <div class="heading">
-      <button onclick="displayCenterStyleSettings(); displaySettings();">Back</button>
+      <button onclick="displayCenterStyleSettings(); displaySettings();">&#10140;</button>
       <h1>Scoreboard Center Style</h1>
     </div>
-    <div class="settings-module" id="settings-Scoreboard Center Color">
-      <h2>Scoreboard Center Background</h2>
-      <div class="controls-container" id="center-color-controls">
+    <div class="settings-module" id="settings-Scoreboard Center General">
+      <h2>General</h2>
+      <div class="controls-container" id="center-style-controls">
         <div class="control">
-          <p id="center-background-control" onclick="updateCenterBackground('')">Background Style: </p>
-          <input type="text" id="center-background-textbox" placeholder="CSS" onkeydown="updateCenterBackground(this.value)">
+          <p id="center-shadow-control" onclick="updateCenterShadow('On')">Shadow:</p>
+          <label class="radio-option">
+            <input type="radio" name="center-shadow" value="On" id="center-shadow-radio-on" onclick="updateCenterShadow(this.value)" checked>On<br>
+            <span class="check-radio"></span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="center-shadow" value="Off" id="center-shadow-radio-off" onclick="updateCenterShadow(this.value)">Off<br>
+            <span class="check-radio"></span>
+          </label>
         </div>
+        <div class="control">
+          <p id="center-radius-control" onclick="updateCenterRadius(0)">Corner Radius: 0px</p>
+          <input type="range" min="0" max="200" value="0" class="slider" id="center-radius-slider" oninput="updateCenterRadius(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="settings-module" id="settings-Scoreboard Center Color">
+      <h2>Background</h2>
+      <div class="controls-container" id="center-background-controls">
         <div class="control">
           <p id="center-color-red-control" onclick="updateCenterColorRed(255)">Red: 255</p>
           <input type="range" min="0" max="255" value="255" class="slider" id="center-color-red-slider" oninput="updateCenterColorRed(this.value)">
@@ -711,19 +759,12 @@
           <input type="range" min="0" max="255" value="255" class="slider" id="center-color-blue-slider" oninput="updateCenterColorBlue(this.value)">
         </div>
         <div class="control">
-          <p id="center-color-alpha-control" onclick="updateCenterColorAlpha(100)">Alpha: 1.0</p>
+          <p id="center-color-alpha-control" onclick="updateCenterColorAlpha(100)">Alpha: 1</p>
           <input type="range" min="0" max="100" value="100" class="slider" id="center-color-alpha-slider" oninput="updateCenterColorAlpha(this.value)">
         </div>
         <div class="control">
-          <p id="center-shadow-control" onclick="updateCenterShadow('On')">Shadow:</p>
-          <label class="radio-option">
-            <input type="radio" name="center-shadow" value="On" id="center-shadow-radio-on" onclick="updateCenterShadow(this.value)" checked>On<br>
-            <span class="check-radio"></span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="center-shadow" value="Off" id="center-shadow-radio-off" onclick="updateCenterShadow(this.value)">Off<br>
-            <span class="check-radio"></span>
-          </label>
+          <p id="center-background-control" onclick="updateCenterBackground('')">Style Override: </p>
+          <input type="text" id="center-background-textbox" placeholder="CSS" onkeydown="updateCenterBackground(this.value)">
         </div>
       </div>
     </div>
@@ -991,6 +1032,40 @@ function updateScoreboardColorAlpha(value) {
   document.documentElement.style.setProperty('--scoreboard-background-alpha', (value/100));
   document.getElementById("scoreboard-color-alpha-control").innerHTML = "Alpha: " + (value/100);
   document.getElementById("scoreboard-color-alpha-slider").value = value;
+}
+
+function updateScoreboardBorderWidth(value) {
+  document.documentElement.style.setProperty('--scoreboard-border-width', value + "px");
+  document.getElementById("scoreboard-border-width-control").innerHTML = "Width: " + value + "px";
+  document.getElementById("scoreboard-border-width-slider").value = value;
+}
+
+function updateScoreboardBorderRed(value) {
+  document.documentElement.style.setProperty('--scoreboard-border', "rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha))");
+  document.documentElement.style.setProperty('--scoreboard-border-red', value);
+  document.getElementById("scoreboard-border-red-control").innerHTML = "Red: " + value;
+  document.getElementById("scoreboard-border-red-slider").value = value;
+}
+
+function updateScoreboardBorderGreen(value) {
+  document.documentElement.style.setProperty('--scoreboard-border', "rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha))");
+  document.documentElement.style.setProperty('--scoreboard-border-green', value);
+  document.getElementById("scoreboard-border-green-control").innerHTML = "Green: " + value;
+  document.getElementById("scoreboard-border-green-slider").value = value;
+}
+
+function updateScoreboardBorderBlue(value) {
+  document.documentElement.style.setProperty('--scoreboard-border', "rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha))");
+  document.documentElement.style.setProperty('--scoreboard-border-blue', value);
+  document.getElementById("scoreboard-border-blue-control").innerHTML = "Blue: " + value;
+  document.getElementById("scoreboard-border-blue-slider").value = value;
+}
+
+function updateScoreboardBorderAlpha(value) {
+  document.documentElement.style.setProperty('--scoreboard-border', "rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha))");
+  document.documentElement.style.setProperty('--scoreboard-border-alpha', (value/100));
+  document.getElementById("scoreboard-border-alpha-control").innerHTML = "Alpha: " + (value/100);
+  document.getElementById("scoreboard-border-alpha-slider").value = value;
 }
 
 function updateScoreboardShadow(value) {
