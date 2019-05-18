@@ -92,18 +92,9 @@
     border-width: var(--scoreboard-border-width);
     border-color: var(--scoreboard-border);
     transform: scale(var(--scoreboard-scale));
-    animation: slide-in-top 0.75s;
+    /* animation: slide-in-top 0.75s; */
     animation-timing-function: ease;
     transition: 0.25s;
-  }
-
-  @keyframes slide-in-top {
-    from {
-      top: calc(-1 * (var(--scoreboard-height) + var(--scoreboard-vertical-margin)));
-    }
-    to {
-      top: 0;
-    }
   }
 
   .score {
@@ -134,6 +125,7 @@
     margin-left: var(--player-horizontal-margin);
     margin-right: var(--player-horizontal-margin);
     background: var(--player-background);
+    transition: 0.25s;
   }
 
   .playername {
@@ -192,7 +184,8 @@
     height: 100%;
     font-family: sans-serif;
     margin: 0;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     position: relative;
     align-items: center;
     justify-content: center;
@@ -224,6 +217,7 @@
 
       #title {
         margin: 0;
+        padding-top: 5px;
         text-align: center;
         font-weight: bold;
         background: rgba(0,0,0,0);
@@ -232,6 +226,8 @@
         font-family: var(--font-family);
         color: var(--title-color);
         word-break: break-all;
+        margin-left: 5px;
+        margin-right: 5px;
         transition: 0.25s;
       }
 
@@ -258,7 +254,6 @@
     #right-content .player {
       right: 0;
     }
-
 
   #settings-toggle {
     bottom: 0px;
@@ -308,18 +303,20 @@
 
   .heading button {
     margin: 20px;
-    background: white;
     border: 0px;
     transition: 0.25s;
     line-height: 1.25;
     font-size: 22pt;
+    background: transparent;
+    color: #212121;
     cursor: pointer;
     transform: rotate(180deg);
     margin-right: 0px;
   }
 
   .heading button:hover {
-    background: #E0E0E0;
+    color: #78909C;
+    transform: rotate(180deg) scale(1.25);
   }
 
   .panel h1{
@@ -427,6 +424,7 @@
      padding: 5px;
      transition: 0.25s;
      font-family: 'Roboto', sans-serif;
+     width: 250px;
    }
 
    input[type=text]:focus {
@@ -873,7 +871,7 @@ function updateCenterImage(event) {
 
 function updateTextDisplayed(element) {
     var prevText = element.textContent;
-    var newText = prompt("What should be displayed?");
+    var newText = prompt("What should be displayed?", prevText);
     if ((newText != null) && (newText !== "")) {
       element.innerHTML = newText;
     } else {
