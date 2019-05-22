@@ -28,7 +28,12 @@
     --ui-color: #4c64ff;
 
     /* Scoreboard Styles */
-    --scoreboard-scale: 1;
+    --sb-x-offset: 0px;
+    --sb-y-offset: 10px;
+    --sb-width: 300px;
+    --sb-height: 100px;
+
+    /* --scoreboard-scale: 1;
     --scoreboard-width: 300px;
     --scoreboard-height: 100px;
     --scoreboard-vertical-margin: 10px;
@@ -44,7 +49,7 @@
     --scoreboard-border-blue: 0;
     --scoreboard-border-alpha: 1;
     --scoreboard-border: rgba(var(--scoreboard-border-red),var(--scoreboard-border-green),var(--scoreboard-border-blue),var(--scoreboard-border-alpha));
-    --scoreboard-corner-radius: 0px;
+    --scoreboard-corner-radius: 0px; */
 
     /* Center Styles */
     --center-background-red: 255;
@@ -103,8 +108,10 @@
     /* top: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
     bottom: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2)); */
     background: blue;
-    width: var(--scoreboard-width);
-    height: var(--scoreboard-height);
+    width: var(--sb-width);
+    height: auto;
+    border: 1px solid blue;
+    flex-direction: column;
     /* margin-left: calc(((100% - var(--scoreboard-width))/2 - var(--scoreboard-border-width)));
     box-shadow: var(--scoreboard-shadow);
     font-family: var(--font-family);
@@ -114,6 +121,13 @@
     border-color: var(--scoreboard-border);
     transform: scale(var(--scoreboard-scale)); */
 
+  }
+
+  .sb-section {
+    background: gray;
+    width: 100%;
+    height: 50px;
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,1);
   }
 
   /* @keyframes slide-in-top {
@@ -298,10 +312,14 @@
     transition: 0.25s;
   }
 
+  #settings-content {
+    overflow-y: auto;
+    overflow-x: hidden; 
+  }
+
   .settings-page {
     height: auto;
     max-height: 400px;
-    overflow-y: auto;
   }
 
   #settings-headerbar:hover {
@@ -371,6 +389,11 @@
     background: rgba(0,0,0,0.2);
   }
 
+  .multicontrol-2col {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
   .settings-module {
     display: grid;
   }
@@ -386,6 +409,12 @@
     font-size: 12pt;
     flex-wrap: wrap;
   }
+
+  .controls-container > h2 {
+    color: black;
+    margin: 15px 0px 0px 0px;
+  }
+
   .control {
     display: block;
     margin-bottom: 0;
@@ -396,10 +425,14 @@
   .control p {
     user-select: none;
     cursor: pointer;
+    margin: 15px 0px;
+    max-width: 150px;
+    white-space: nowrap;
   }
 
   .control p:hover {
     color: transparent;
+    /* width: 0; */
   }
 
   .control p:hover::before {
@@ -408,6 +441,9 @@
     color: #EF5350;
     font-weight: bold;
     background: white;
+    position: relative;
+    top: 0;
+    left: 0;
   }
 
   @keyframes fade-in {
@@ -467,14 +503,21 @@
    .radio-grid {
      display: grid;
      justify-content: flex-start;
-     grid-template-columns: auto auto auto;
-     grid-template-rows: auto auto auto;
      grid-gap: 10px;
    }
 
    .radio-grid > div {
      align-self: center;
      text-align: center;
+   }
+
+   #sb-placement-radio-grid {
+     grid-template-columns: auto auto auto;
+     grid-template-rows: auto auto auto;
+   }
+
+   #normal-binary-radio-grid {
+     grid-template-columns: auto auto;
    }
 
    .radio-option {
@@ -545,21 +588,21 @@
 
    .control button {
      margin-top: 20px;
-     margin-bottom: 20px;
      height: 40px;
      color: white;
      font-family: 'Roboto', sans-serif;
      font-size: 12pt;
-     padding: 10px;
      transition: 0.25s;
-     background: #78909C;
-     border: 2px solid #78909C;
+     background: var(--ui-color);
+     border: 2px solid var(--ui-color);
+     border-radius: 10px;
      line-height: 0px;
    }
 
    .control button:hover {
      background: #ffffff;
-     color: #78909C;
+     color: var(--ui-color);
+     box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
    }
 
    #reset-button {
@@ -585,15 +628,11 @@
 
 <body>
 
+  <!--SCOREBOARD-->
   <div class="scoreboard">
 
-    <div class="scoreboard-section">
-    </div>
-
-    <div class="scoreboard-section">
-    </div>
-
-    <div class="scoreboard-section">
+    <div class="sb-section">
+      1
     </div>
 
   </div>
@@ -605,140 +644,169 @@
       <h1>Settings</h1>
     </div>
 
-    <!--Main Menu-->
-    <div class="settings-page" id="main-menu">
-      <div class="listview">
-        <div class="listviewitem" id="settings-layout" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">dashboard</i>
-          <h2>Layout</h2>
-        </div>
-        <div class="listviewitem" id="settings-size" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">crop_free</i>
-          <h2>Size</h2>
-        </div>
-        <div class="listviewitem" id="settings-style" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">palette</i>
-          <h2>Style</h2>
-        </div>
-        <div class="listviewitem" id="settings-text" onclick="changeSettingsPage(this)">
-            <i class="material-icons-outlined">text_fields</i>
-          <h2>Text</h2>
-        </div>
-        <div class="listviewitem" id="settings-import-export" onclick="changeSettingsPage(this)">
-            <i class="material-icons-outlined">settings_backup_restore</i>
-          <h2>Import/Export (*Alpha)</h2>
-        </div>
-      </div>
-    </div>
+    <div id="settings-content">
 
-    <!--Layout-->
-    <div class="settings-page" id="layout-page">
-      <div class="subpage-title">
-        <div class="back-button" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">chevron_left</i>
-        </div>
-        <h2>Layout</h2>
-      </div>
-      <div class="controls-container" id="scoreboard-controls">
-        <div class="control">
-          <p id="scoreboard-placement-control" onclick="updateScoreboardPlacement('top-left', 0, 0)">Placement:</p>
-          <div class="radio-grid" id="placement-radio-grid">
-            <label class="radio-option">
-              <input type="radio" name="placement" value="top-left" id="sb-placement-radio-top-left" onclick="updateScoreboardPlacement(this.value, 0, 0)" checked> <i class="corners-icons icon-top-left"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="top-center" id="sb-placement-radio-top-center" onclick="updateScoreboardPlacement(this.value,0, 0)"> <i class="corners-icons icon-top-center"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="top-right" id="sb-placement-radio-top-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-top-right"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="left-middle" id="sb-placement-radio-left-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-left-middle"></i>
-              <span class="check-radio"></span>
-            </label>
-            <div></div>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="right-middle" id="sb-placement-radio-right-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-right-middle"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="bottom-left" id="sb-placement-radio-bottom-left" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-left"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="bottom-center" id="sb-placement-radio-bottom-center" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-center"></i>
-              <span class="check-radio"></span>
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="placement" value="bottom-right" id="scoreboard-placement-radio-bottom-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="customIcons icon-bottom-right"></i>
-              <span class="check-radio"></span>
-            </label>
+      <!--Main Menu-->
+      <div class="settings-page" id="main-menu">
+        <div class="listview">
+          <div class="listviewitem" id="settings-layout" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">dashboard</i>
+            <h2>Layout</h2>
+          </div>
+          <div class="listviewitem" id="settings-size" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">crop_free</i>
+            <h2>Size</h2>
+          </div>
+          <div class="listviewitem" id="settings-style" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">palette</i>
+            <h2>Style</h2>
+          </div>
+          <div class="listviewitem" id="settings-text" onclick="changeSettingsPage(this)">
+              <i class="material-icons-outlined">text_fields</i>
+            <h2>Text</h2>
+          </div>
+          <div class="listviewitem" id="settings-import-export" onclick="changeSettingsPage(this)">
+              <i class="material-icons-outlined">settings_backup_restore</i>
+            <h2>Import/Export (*Alpha)</h2>
           </div>
         </div>
-        <div class="control">
-          <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Top: 10px</p>
-          <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
+      </div>
+
+      <!--Layout-->
+      <div class="settings-page" id="layout-page">
+        <div class="subpage-title">
+          <div class="back-button" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">chevron_left</i>
+          </div>
+          <h2>Layout</h2>
         </div>
-        <div class="control">
-          <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
-          <label class="radio-option">
-            <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>On<br>
-            <span class="check-radio"></span>
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">Off<br>
-            <span class="check-radio"></span>
-          </label>
+
+        <div class="controls-container" id="placement-controls">
+          <h2>Modules</h2>
+          <div class="control">
+            <button id="center-style-button" onclick="addSBSection();">
+              <i class="material-icons-outlined">add</i>
+            </button>
+            <button id="center-style-button" onclick="removeSBSection();">
+              <i class="material-icons-outlined">remove</i>
+            </button>
+          </div>
         </div>
-        <div class="control">
-          <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </p>
-          <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+
+        <div class="controls-container" id="placement-controls">
+          <h2>Placement</h2>
+          <div class="multicontrol-2col">
+            <div class="control">
+              <p id="scoreboard-placement-control" onclick="updateScoreboardPlacement('top-left', 0, 0)">Position:</p>
+              <div class="radio-grid" id="sb-placement-radio-grid">
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="top-left" id="sb-placement-radio-top-left" onclick="updateScoreboardPlacement(this.value, 0, 0)" checked> <i class="corners-icons icon-top-left"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="top-center" id="sb-placement-radio-top-center" onclick="updateScoreboardPlacement(this.value,0, 0)"> <i class="corners-icons icon-top-center"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="top-right" id="sb-placement-radio-top-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-top-right"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="left-middle" id="sb-placement-radio-left-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-left-middle"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <div></div>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="right-middle" id="sb-placement-radio-right-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-right-middle"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="bottom-left" id="sb-placement-radio-bottom-left" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-left"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="bottom-center" id="sb-placement-radio-bottom-center" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-center"></i>
+                  <span class="check-radio"></span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="placement" value="bottom-right" id="scoreboard-placement-radio-bottom-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="customIcons icon-bottom-right"></i>
+                  <span class="check-radio"></span>
+                </label>
+              </div>
+            </div>
+            <div class="control">
+              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Vertical Margin: 10px</p>
+              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
+            </div>
+            <div class="control">
+              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Vertical Margin: 10px</p>
+              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
+            </div>
+          </div>
+
+        </div>
+        <div class="controls-container" id="other-controls">
+          <div class="control">
+            <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
+            <div class="radio-grid" id="normal-binary-radio-grid">
+              <label class="radio-option">
+                <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked> <h3>ON</h3>
+                <span class="check-radio"></span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)"><h3>OFF</h3>
+                <span class="check-radio"></span>
+              </label>
+            </div>
+          </div>
+          <div class="control">
+            <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </p>
+            <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!--Size-->
+      <div class="settings-page" id="size-page">
+        <div class="subpage-title">
+          <div class="back-button" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">chevron_left</i>
+          </div>
+          <h2>Size</h2>
+        </div>
+      </div>
+
+      <!--Style-->
+      <div class="settings-page" id="style-page">
+        <div class="subpage-title">
+          <div class="back-button" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">chevron_left</i>
+          </div>
+          <h2>Style</h2>
+        </div>
+      </div>
+
+      <!--Text-->
+      <div class="settings-page" id="text-page">
+        <div class="subpage-title">
+          <div class="back-button" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">chevron_left</i>
+          </div>
+          <h2>Text</h2>
+        </div>
+      </div>
+
+      <!--Import/Export-->
+      <div class="settings-page" id="import-export-page">
+        <div class="subpage-title">
+          <div class="back-button" onclick="changeSettingsPage(this)">
+            <i class="material-icons-outlined">chevron_left</i>
+          </div>
+          <h2>Import/Export</h2>
         </div>
       </div>
     </div>
 
-    <!--Size-->
-    <div class="settings-page" id="size-page">
-      <div class="subpage-title">
-        <div class="back-button" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">chevron_left</i>
-        </div>
-        <h2>Size</h2>
-      </div>
-    </div>
-
-    <!--Style-->
-    <div class="settings-page" id="style-page">
-      <div class="subpage-title">
-        <div class="back-button" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">chevron_left</i>
-        </div>
-        <h2>Style</h2>
-      </div>
-    </div>
-
-    <!--Text-->
-    <div class="settings-page" id="text-page">
-      <div class="subpage-title">
-        <div class="back-button" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">chevron_left</i>
-        </div>
-        <h2>Text</h2>
-      </div>
-    </div>
-
-    <!--Import/Export-->
-    <div class="settings-page" id="import-export-page">
-      <div class="subpage-title">
-        <div class="back-button" onclick="changeSettingsPage(this)">
-          <i class="material-icons-outlined">chevron_left</i>
-        </div>
-        <h2>Import/Export</h2>
-      </div>
-    </div>
   </div>
 </body>
   <!-- <button id="settings-toggle" onclick="displaySettings()">🛠 Settings</button> -->
@@ -1049,7 +1117,9 @@ function dragElement(elmnt) {
     }
     if ((elmnt.offsetLeft - offsetX) < 0) {
       elmnt.style.left = 0 + "px";
-    } else {
+    }
+
+     else {
       elmnt.style.left = (elmnt.offsetLeft - offsetX) + "px";
       elmnt.style.top = (elmnt.offsetTop - offsetY) + "px";
     }
@@ -1086,6 +1156,15 @@ function changeSettingsPage(e) {
   // }
 }
 
+function addSBSection() {
+  var newSection = document.createElement("div");
+  newSection.classList.add("sb-section");
+  document.querySelector(".scoreboard").appendChild(newSection);
+}
+
+function removeSBSection() {
+  document.querySelector(".scoreboard").removeChild(document.querySelector(".sb-section"));
+}
 
 //
 // function displayScoreboardStyleSettings() {
