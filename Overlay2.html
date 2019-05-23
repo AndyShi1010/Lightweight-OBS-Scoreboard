@@ -9,6 +9,7 @@
   body {
     margin: 0px;
     overflow: hidden;
+    font-family: 'Roboto', sans-serif;
   }
 
   @font-face {
@@ -20,6 +21,12 @@
          url('assets/fonts/corners.svg?76933400#corners') format('svg');
     font-weight: normal;
     font-style: normal;
+  }
+
+  .corners-icons {
+    font-family: "corners";
+    font-style: normal;
+    font-weight: normal;
   }
 
   :root {
@@ -130,14 +137,10 @@
     box-shadow: inset 0px 0px 10px rgba(0,0,0,1);
   }
 
-  /* @keyframes slide-in-top {
-    from {
-      top: calc(-1 * (var(--scoreboard-height) + var(--scoreboard-vertical-margin)));
-    }
-    to {
-      top: 0;
-    }
-  } */
+  .scoreboard div {
+    color: white;
+    font-size: 18pt;
+  }
 
   /* .score {
     position: absolute;
@@ -204,7 +207,7 @@
     display: flex;
   } */
 
-  .image-chooser {
+  /* .image-chooser {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -217,27 +220,7 @@
     font-size: 20px;
   }
 
-  #center-content {
-    width: var(--center-width);
-    height: 100%;
-    font-family: sans-serif;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    background: var(--center-background);
-    z-index: 1;
-    transform: scale(var(--center-scale));
-    box-shadow: var(--center-shadow);
-    max-width: var(--center-width);
-    overflow: hidden;
-    border-radius: var(--center-corner-radius);
-    transition: 0.25s;
-
-  }
-      #center-content-image {
+  #center-content-image {
         position: relative;
         overflow: hidden;
         display: flex;
@@ -267,7 +250,7 @@
         margin-left: 5px;
         margin-right: 5px;
         transition: 0.25s;
-      }
+      } */
 
   /* Settings Panel Styles*/
   #settings-overlay {
@@ -312,34 +295,27 @@
     transition: 0.25s;
   }
 
-  #settings-content {
-    overflow-y: auto;
-    overflow-x: hidden; 
-  }
-
-  .settings-page {
-    height: auto;
-    max-height: 400px;
-  }
-
   #settings-headerbar:hover {
     box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
   }
 
+  #settings-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
   #settings-overlay h1, h2{
-    font-family: 'Roboto', sans-serif;
     margin: 0px 20px;
     color: #212121;
+    user-select: none;
   }
 
   #settings-overlay h1 {
-    user-select: none;
     font-weight: 700;
     font-size: 18pt;
   }
 
   #settings-overlay h2 {
-    user-select: none;
     font-weight: 500;
     font-size: 14pt;
   }
@@ -348,22 +324,9 @@
     user-select: none;
   }
 
-  .listview {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .listviewitem {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 15px 20px;
-    transition: 0.25s;
-    cursor: pointer;
-  }
-
-  .listviewitem:hover {
-    background: rgba(0,0,0,0.2);
+  .settings-page {
+    height: auto;
+    max-height: 400px;
   }
 
   .subpage-title {
@@ -389,15 +352,6 @@
     background: rgba(0,0,0,0.2);
   }
 
-  .multicontrol-2col {
-    display: grid;
-    grid-template-columns: auto auto;
-  }
-
-  .settings-module {
-    display: grid;
-  }
-
   .controls-container {
     display: flex;
     flex-direction: column;
@@ -411,10 +365,13 @@
   }
 
   .controls-container > h2 {
-    color: black;
-    margin: 15px 0px 0px 0px;
+    color: #212121;
+    margin: 15px 0px 15px 0px;
   }
 
+/*SETTINGS UI COMPONENENTS*/
+
+  /*Controls Default*/
   .control {
     display: block;
     margin-bottom: 0;
@@ -432,11 +389,9 @@
 
   .control p:hover {
     color: transparent;
-    /* width: 0; */
   }
 
   .control p:hover::before {
-    animation: fade-in 0.5s;
     content: 'Reset';
     color: #EF5350;
     font-weight: bold;
@@ -446,15 +401,42 @@
     left: 0;
   }
 
-  @keyframes fade-in {
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
+  /*ListView*/
+  .listview {
+    display: flex;
+    flex-direction: column;
   }
 
+  .listviewitem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px 20px;
+    transition: 0.25s;
+    cursor: pointer;
+  }
+
+  .listviewitem:hover {
+    background: rgba(0,0,0,0.2);
+  }
+
+  /*MultiControl*/
+  .multicontrol-2col {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
+  /*Stepper*/
+  .input-stepper {
+    display: flex;
+    align-items: center;
+  }
+
+  .input-stepper h2 {
+    margin: 0 20px 0 0;
+  }
+
+  /*Slider*/
   input[type=range] {
     -webkit-appearance: none;
     background: #E0E0E0;
@@ -463,10 +445,14 @@
   }
 
   input[type=range]:focus {
-    background: #8b92ff;
+    background: #bfc8ff;
   }
 
- input[type=range]::-webkit-slider-thumb {
+  input[type=range]:disabled {
+    filter: grayscale(1);
+  }
+
+  input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
@@ -479,7 +465,7 @@
     box-shadow: 0px 0px 6px rgba(0,0,0,0.25);
   }
 
-  input[type=range]::-webkit-slider-thumb:hover {
+ input[type=range]::-webkit-slider-thumb:hover {
      transform: scale(1);
      background: white;
      border: 3px solid var(--ui-color);
@@ -487,142 +473,151 @@
      /* box-shadow: inset 0px 0px 0px 3px #78909C; */
    }
 
-   input[type=text] {
-     border: 2px solid #E0E0E0;
-     padding: 5px;
-     transition: 0.25s;
-     font-family: 'Roboto', sans-serif;
-     width: 250px;
-   }
+/*TextField*/
+ input[type=text] {
+   border: 2px solid #E0E0E0;
+   padding: 10px;
+   transition: 0.25s;
+   font-family: 'Roboto', sans-serif;
+   width: 250px;
+ }
 
-   input[type=text]:focus {
-     border: 2px solid #78909C;
-   }
+ input[type=text]:hover {
+   border: 2px solid #bfc8ff;
+ }
 
-   /*Radio*/
-   .radio-grid {
-     display: grid;
-     justify-content: flex-start;
-     grid-gap: 10px;
-   }
+ input[type=text]:focus {
+   border: 2px solid var(--ui-color);
+   box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
+ }
 
-   .radio-grid > div {
-     align-self: center;
-     text-align: center;
-   }
+ /*RadioGrid*/
+ .radio-grid {
+   display: grid;
+   justify-content: flex-start;
+   grid-gap: 10px;
+ }
 
-   #sb-placement-radio-grid {
-     grid-template-columns: auto auto auto;
-     grid-template-rows: auto auto auto;
-   }
+ .radio-grid > div {
+   align-self: center;
+   text-align: center;
+ }
 
-   #normal-binary-radio-grid {
-     grid-template-columns: auto auto;
-   }
+ .radio-grid .check-radio {
+   background: none;
+   width: 100%;
+   height: 100%;
+ }
 
-   .radio-option {
-     padding: 10px;
-     display: block;
-     position: relative;
-     cursor: pointer;
-     font-size: 12pt;
-     user-select: none;
-     transition: 0.25s;
-   }
+ .radio-grid .radio-option {
+    margin: 0px 0px 0px 0px;
+ }
 
-   .radio-option input {
-     position: absolute;
-     opacity: 0;
-     cursor: pointer;
-   }
+ #sb-placement-radio-grid {
+   grid-template-columns: auto auto auto;
+   grid-template-rows: auto auto auto;
+ }
 
-   .check-radio {
-     position: absolute;
-     top: 0;
-     left: 0;
-     height: 100%;
-     width: 100%;
-     z-index: -5;
-     border-radius: 50%;
-     transition: 0.25s;
-     vertical-align: middle;
-   }
+ /*Radio*/
+ .radio-option {
+   margin: 10px 0px 10px 0px;
+   padding: 10px;
+   display: block;
+   position: relative;
+   cursor: pointer;
+   font-size: 12pt;
+   user-select: none;
+ }
 
-   .radio-option:checked {
-     font-weight: bolder;
-   }
+ .radio-option input {
+   position: absolute;
+   opacity: 0;
+   cursor: pointer;
+ }
 
-   .radio-option:hover input ~ .check-radio {
-     background-color: rgba(0,0,0,0.2);
-     /* box-shadow: inset 0px 0px 0px 2px #78909C;
-     transform: scale(1.25); */
-   }
+ .check-radio {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 15px;
+   width: 15px;
+   z-index: -5;
+   border-radius: 50%;
+   transition: 0.25s;
+   vertical-align: middle;
+   background: rgba(0,0,0,0.2);
+ }
 
-   .radio-option input:checked ~ .check-radio {
-     background-color: var(--ui-color);
-     box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
-   }
+ .radio-option:checked {
+   font-weight: bolder;
+ }
 
-   .radio-option input:checked ~ i {
-     color: white;
-   }
+ .radio-option:hover input ~ .check-radio {
+   background-color: #bfc8ff;
+   transform: scale(1.25);
+ }
 
-   .container input:checked ~ .checkmark:after {
-     display: block;
-   }
+ .radio-option input:checked ~ .check-radio {
+   background-color: var(--ui-color);
+   box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
+ }
 
-   .container .checkmark:after {
-     top: 9px;
-	   left: 9px;
-     width: 8px;
-     height: 8px;
-     border-radius: 50%;
-  	 background: white;
-   }
+ .radio-option input:checked ~ i {
+   color: white;
+ }
 
-   .corners-icons {
-     font-family: "corners";
-     font-style: normal;
-     font-weight: normal;
-   }
+ /* .container input:checked ~ .checkmark:after {
+   display: block;
+ }
 
-   .control button {
-     margin-top: 20px;
-     height: 40px;
-     color: white;
-     font-family: 'Roboto', sans-serif;
-     font-size: 12pt;
-     transition: 0.25s;
-     background: var(--ui-color);
-     border: 2px solid var(--ui-color);
-     border-radius: 10px;
-     line-height: 0px;
-   }
+ .container .checkmark:after {
+   top: 9px;
+   left: 9px;
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+	 background: white;
+ } */
 
-   .control button:hover {
-     background: #ffffff;
-     color: var(--ui-color);
-     box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
-   }
+ /*Button*/
+ .control button {
+   margin: 0px 20px 0px 0px;
+   height: 40px;
+   color: var(--ui-color);
+   font-family: 'Roboto', sans-serif;
+   font-size: 12pt;
+   transition: 0.25s;
+   background: transparent;
+   border: 2px solid #E0E0E0;
+   border-radius: 10000px;
+   line-height: 0px;
+ }
 
-   #reset-button {
-     margin: 20px;
-     height: 40px;
-     width: 200px;
-     background: #EF5350;
-     border: 2px solid #EF5350;
-     color: white;
-     font-family: 'Roboto', sans-serif;
-     font-size: 12pt;
-     font-weight: bold;
-     padding: 10px;
-     transition: 0.25s;
-   }
+ .control button:hover {
+   background: var(--ui-color);
+   border: 2px solid var(--ui-color);
+   color: white;
+   box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
+ }
 
-   #reset-button:hover {
-     background: #ffffff;
-     color: #EF5350;
-   }
+ #reset-button {
+   margin: 20px;
+   height: 40px;
+   width: 200px;
+   background: #EF5350;
+   border: 2px solid #EF5350;
+   color: white;
+   font-family: 'Roboto', sans-serif;
+   font-size: 12pt;
+   font-weight: bold;
+   padding: 10px;
+   transition: 0.25s;
+ }
+
+ #reset-button:hover {
+   background: #ffffff;
+   color: #EF5350;
+ }
   </style>
 </head>
 
@@ -631,12 +626,10 @@
   <!--SCOREBOARD-->
   <div class="scoreboard">
 
-    <div class="sb-section">
-      1
-    </div>
-
   </div>
 
+
+<!--SETTINGS-->
   <div id="settings-overlay">
 
     <div id="settings-headerbar">
@@ -684,12 +677,15 @@
         <div class="controls-container" id="placement-controls">
           <h2>Modules</h2>
           <div class="control">
-            <button id="center-style-button" onclick="addSBSection();">
-              <i class="material-icons-outlined">add</i>
-            </button>
-            <button id="center-style-button" onclick="removeSBSection();">
-              <i class="material-icons-outlined">remove</i>
-            </button>
+            <div class="input-stepper">
+              <button id="center-style-button" onclick="removeSBSection();">
+                <i class="material-icons-outlined">remove</i>
+              </button>
+              <h2 class="stepper-text" id="section-step-text"></h2>
+              <button id="center-style-button" onclick="addSBSection(1);">
+                <i class="material-icons-outlined">add</i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -735,12 +731,10 @@
               </div>
             </div>
             <div class="control">
-              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Vertical Margin: 10px</p>
+              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">X: 10px</p>
               <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
-            </div>
-            <div class="control">
-              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Vertical Margin: 10px</p>
-              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
+              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Y: 10px</p>
+              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)" disabled>
             </div>
           </div>
 
@@ -748,16 +742,18 @@
         <div class="controls-container" id="other-controls">
           <div class="control">
             <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
-            <div class="radio-grid" id="normal-binary-radio-grid">
+            <!-- <div class="radio-grid" id="normal-binary-radio-grid"> -->
               <label class="radio-option">
-                <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked> <h3>ON</h3>
+                <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>
+                On
                 <span class="check-radio"></span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)"><h3>OFF</h3>
+                <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">
+                Off
                 <span class="check-radio"></span>
               </label>
-            </div>
+            <!-- </div> -->
           </div>
           <div class="control">
             <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </p>
@@ -1063,18 +1059,29 @@
 
 <script>
 
-console.log(window.innerHeight);
-document.getElementById("scoreboard-margin-slider").max = (window.innerHeight/2);
+// var sb-xPos;
+// var sb-yPos;
+var sbSections = 0;
+var sbPosition = "";
+
+initializeSettings();
+addSBSection(3);
+dragElement(document.getElementById("settings-overlay"));
+
+// console.log(window.innerHeight);
+// document.getElementById("scoreboard-margin-slider").max = (window.innerHeight/2);
 
 window.onresize = function() {
     document.getElementById("scoreboard-margin-slider").max = (window.innerHeight/2);
 };
 
-document.getElementById("layout-page").classList.add("settings-page-hidden");
-document.getElementById("size-page").classList.add("settings-page-hidden");
-document.getElementById("style-page").classList.add("settings-page-hidden");
-document.getElementById("text-page").classList.add("settings-page-hidden");
-document.getElementById("import-export-page").classList.add("settings-page-hidden");
+function initializeSettings() {
+  document.getElementById("layout-page").classList.add("settings-page-hidden");
+  document.getElementById("size-page").classList.add("settings-page-hidden");
+  document.getElementById("style-page").classList.add("settings-page-hidden");
+  document.getElementById("text-page").classList.add("settings-page-hidden");
+  document.getElementById("import-export-page").classList.add("settings-page-hidden");
+}
 
 document.addEventListener('keyup', function (event) {
     if (event.defaultPrevented) {
@@ -1086,8 +1093,6 @@ document.addEventListener('keyup', function (event) {
     }
 });
 
-dragElement(document.getElementById("settings-overlay"));
-
 function dragElement(elmnt) {
   var offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
   if (document.getElementById("settings-headerbar")) {
@@ -1095,7 +1100,6 @@ function dragElement(elmnt) {
   } else {
     elmnt.onmousedown = dragMouseDown;
   }
-
   function dragMouseDown(e) {
     e = e || window.event;
     e.preventDefault();
@@ -1104,7 +1108,6 @@ function dragElement(elmnt) {
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
   }
-
   function elementDrag(e) {
     e = e || window.event;
     e.preventDefault();
@@ -1117,14 +1120,11 @@ function dragElement(elmnt) {
     }
     if ((elmnt.offsetLeft - offsetX) < 0) {
       elmnt.style.left = 0 + "px";
-    }
-
-     else {
+    } else {
       elmnt.style.left = (elmnt.offsetLeft - offsetX) + "px";
       elmnt.style.top = (elmnt.offsetTop - offsetY) + "px";
     }
   }
-
   function closeDragElement() {
     document.onmouseup = null;
     document.onmousemove = null;
@@ -1151,37 +1151,30 @@ function changeSettingsPage(e) {
     document.getElementById("layout-page").classList.add("settings-page-hidden")
     document.getElementById("size-page").classList.remove("settings-page-hidden");
   }
-  // else {
-  //   document.getElementById("main-menu").classList.add("settings-page-hidden");
-  // }
 }
 
-function addSBSection() {
-  var newSection = document.createElement("div");
-  newSection.classList.add("sb-section");
-  document.querySelector(".scoreboard").appendChild(newSection);
+function addSBSection(amount) {
+  for (var i = 0; i < amount; i++) {
+    sbSections++;
+    document.getElementById("section-step-text").innerHTML = sbSections;
+    console.log(sbSections);
+    var newSection = document.createElement("div");
+    newSection.classList.add("sb-section");
+    newSection.classList.add("section" + sbSections);
+    newSection.innerHTML = sbSections;
+    document.querySelector(".scoreboard").appendChild(newSection);
+  }
 }
 
 function removeSBSection() {
-  document.querySelector(".scoreboard").removeChild(document.querySelector(".sb-section"));
+  if (sbSections > 0) {
+    document.querySelector(".scoreboard").removeChild(document.querySelector(".section" + sbSections));
+    sbSections--;
+    document.getElementById("section-step-text").innerHTML = sbSections;
+    updateScoreboardPlacement(sbPosition, 0, 0);
+  }
 }
 
-//
-// function displayScoreboardStyleSettings() {
-//   if (document.getElementById("scoreboard-style-settings").style.display === "none") {
-//     document.getElementById("scoreboard-style-settings").style.display = "block";
-//   } else {
-//     document.getElementById("scoreboard-style-settings").style.display = "none";
-//   }
-// }
-//
-// function displayCenterStyleSettings() {
-//   if (document.getElementById("center-style-settings").style.display === "none") {
-//     document.getElementById("center-style-settings").style.display = "block";
-//   } else {
-//     document.getElementById("center-style-settings").style.display = "none";
-//   }
-// }
 //
 // document.addEventListener('DOMContentLoaded',function() {
 //     document.querySelector('#left-icon-chooser').onchange=updateLeftImage;
@@ -1233,7 +1226,9 @@ function removeSBSection() {
 //     }
 // }
 //
+
 function updateScoreboardPlacement(position, x, y) {
+  sbPosition = position;
   var scoreboard = document.querySelector(".scoreboard");
   switch(position) {
     case "top-left":
@@ -1242,51 +1237,60 @@ function updateScoreboardPlacement(position, x, y) {
       scoreboard.style.setProperty('left', x);
       scoreboard.style.setProperty('top', y);
       document.getElementById("sb-placement-radio-top-left").checked = true;
+      return position;
       break;
     case "top-center":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', (window.innerWidth/2)-(scoreboard.offsetWidth/2));
       scoreboard.style.setProperty('top', y);
+      return position;
       break;
     case "top-right":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('left');
       scoreboard.style.setProperty('right', x);
       scoreboard.style.setProperty('top', y);
+      return position;
       break;
     case "left-middle":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', x);
       scoreboard.style.setProperty('top', (window.innerHeight/2)-(scoreboard.offsetHeight/2));
+      return position;
       break;
     case "right-middle":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('left');
       scoreboard.style.setProperty('right', x);
       scoreboard.style.setProperty('bottom', (window.innerHeight/2)-(scoreboard.offsetHeight/2));
+      return position;
       break;
     case "bottom-left":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', x);
       scoreboard.style.setProperty('bottom', y);
+      return position;
       break;
     case "bottom-center":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', (window.innerWidth/2)-(scoreboard.offsetWidth/2));
       scoreboard.style.setProperty('bottom', y);
+      return position;
       break;
       case "bottom-right":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('left');
       scoreboard.style.setProperty('right', x);
       scoreboard.style.setProperty('bottom', y);
-        break;
+      return position;
+      break;
     default:
       console.log("default");
+      return position;
   }
 }
 //
