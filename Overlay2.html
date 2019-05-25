@@ -36,7 +36,7 @@
 
     /* Scoreboard Styles */
     --sb-x-offset: 0px;
-    --sb-y-offset: 10px;
+    --sb-y-offset: 0px;
     --sb-width: 300px;
     --sb-height: 100px;
 
@@ -115,10 +115,9 @@
     /* top: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2));
     bottom: calc(var(--scoreboard-vertical-margin) + (((var(--scoreboard-height) * var(--scoreboard-scale)) - var(--scoreboard-height))/2)); */
     background: blue;
-    width: var(--sb-width);
+    width: auto;
     height: auto;
-    border: 1px solid blue;
-    flex-direction: column;
+    border: 2px solid blue;
     /* margin-left: calc(((100% - var(--scoreboard-width))/2 - var(--scoreboard-border-width)));
     box-shadow: var(--scoreboard-shadow);
     font-family: var(--font-family);
@@ -133,8 +132,9 @@
   .sb-section {
     background: gray;
     width: 100%;
-    height: 50px;
+    height: 100%;
     box-shadow: inset 0px 0px 10px rgba(0,0,0,1);
+    /* padding: 10px; */
   }
 
   .scoreboard div {
@@ -252,7 +252,16 @@
         transition: 0.25s;
       } */
 
+
   /* Settings Panel Styles*/
+  #viewport-border {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0px 0px 1px 4px white;
+    opacity: 0;
+  }
+
   #settings-overlay {
     top: 20px;
     left: 20px;
@@ -267,6 +276,7 @@
     transform: scale(0.75);
     filter: grayscale(1);
     visibility: collapse;
+    user-select: none;
   }
 
   .settings-show {
@@ -307,7 +317,7 @@
   #settings-overlay h1, h2{
     margin: 0px 20px;
     color: #212121;
-    user-select: none;
+    /* user-select: none; */
   }
 
   #settings-overlay h1 {
@@ -320,13 +330,9 @@
     font-size: 14pt;
   }
 
-  #settings-overlay i {
-    user-select: none;
-  }
-
   .settings-page {
     height: auto;
-    max-height: 400px;
+    max-height: 50vh;
   }
 
   .subpage-title {
@@ -356,7 +362,6 @@
     display: flex;
     flex-direction: column;
     margin: 20px;
-    margin-top: 0;
     font-family: 'Roboto', sans-serif;
     color: #212121;
     font-weight: normal;
@@ -379,19 +384,21 @@
     transition: 0.25s;
   }
 
-  .control p {
+  .control h3 {
     user-select: none;
     cursor: pointer;
     margin: 15px 0px;
-    max-width: 150px;
+    max-width: 125px;
     white-space: nowrap;
+    font-weight: normal;
+    font-size: 12pt;
   }
 
-  .control p:hover {
+  .control h3:hover {
     color: transparent;
   }
 
-  .control p:hover::before {
+  .control h3:hover::before {
     content: 'Reset';
     color: #EF5350;
     font-weight: bold;
@@ -432,8 +439,18 @@
     align-items: center;
   }
 
-  .input-stepper h2 {
+  .input-stepper h4 {
     margin: 0 20px 0 0;
+    font-weight: normal;
+    font-size: 12pt;
+  }
+
+  .input-stepper button {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .input-stepper i {
+    font-size: 16px;
   }
 
   /*Slider*/
@@ -473,20 +490,33 @@
      /* box-shadow: inset 0px 0px 0px 3px #78909C; */
    }
 
+  input[type=range]:disabled::-webkit-slider-thumb {
+    box-shadow: none;
+  }
+
+  input[type=range]:disabled::-webkit-slider-thumb:hover {
+     transform: scale(0.75);
+     border: 0px solid transparent;
+     background: var(--ui-color);
+     box-shadow: none;
+     cursor: default;
+  }
+
 /*TextField*/
- input[type=text] {
+ input[type=text], input[type=number] {
    border: 2px solid #E0E0E0;
    padding: 10px;
    transition: 0.25s;
    font-family: 'Roboto', sans-serif;
    width: 250px;
+   height: 3em;
  }
 
- input[type=text]:hover {
+ input[type=text]:hover, input[type=number]:hover {
    border: 2px solid #bfc8ff;
  }
 
- input[type=text]:focus {
+ input[type=text]:focus, input[type=number]:focus {
    border: 2px solid var(--ui-color);
    box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
  }
@@ -511,6 +541,7 @@
 
  .radio-grid .radio-option {
     margin: 0px 0px 0px 0px;
+    padding: 10px;
  }
 
  #sb-placement-radio-grid {
@@ -521,7 +552,6 @@
  /*Radio*/
  .radio-option {
    margin: 10px 0px 10px 0px;
-   padding: 10px;
    display: block;
    position: relative;
    cursor: pointer;
@@ -550,6 +580,12 @@
 
  .radio-option:checked {
    font-weight: bolder;
+ }
+
+ .radio-text {
+   margin: 0;
+   padding-left: 30px;
+   font-weight: normal;
  }
 
  .radio-option:hover input ~ .check-radio {
@@ -583,7 +619,7 @@
  .control button {
    margin: 0px 20px 0px 0px;
    height: 40px;
-   color: var(--ui-color);
+   color: black;
    font-family: 'Roboto', sans-serif;
    font-size: 12pt;
    transition: 0.25s;
@@ -598,6 +634,7 @@
    border: 2px solid var(--ui-color);
    color: white;
    box-shadow: 0px 0px 10px rgba(76, 100, 255, 0.5);
+   transform: scale(1.1);
  }
 
  #reset-button {
@@ -624,10 +661,12 @@
 <body>
 
   <!--SCOREBOARD-->
-  <div class="scoreboard">
+  <div class="scoreboard" draggable="true">
 
   </div>
 
+  <div id="viewport-border">
+  </div>
 
 <!--SETTINGS-->
   <div id="settings-overlay">
@@ -678,14 +717,28 @@
           <h2>Modules</h2>
           <div class="control">
             <div class="input-stepper">
+              <h4 class="stepper-text">Sections</h4>
               <button id="center-style-button" onclick="removeSBSection();">
                 <i class="material-icons-outlined">remove</i>
               </button>
-              <h2 class="stepper-text" id="section-step-text"></h2>
+              <h4 class="stepper-text" id="section-step-text">0</h4>
               <button id="center-style-button" onclick="addSBSection(1);">
                 <i class="material-icons-outlined">add</i>
               </button>
             </div>
+          </div>
+          <div class="control">
+            <h3 id="scoreboard-direction-control" onclick="updateScoreboardDirection('row')">Direction:</h3>
+              <label class="radio-option">
+                <input type="radio" name="scoreboard-direction" value="row" id="sb-direction-row" onclick="updateScoreboardDirection(this.value)">
+                <h4 class="radio-text">Row</h4>
+                <span class="check-radio"></span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="scoreboard-direction" value="column" id="sb-direction-column" onclick="updateScoreboardDirection(this.value)">
+                <h4 class="radio-text">Column</h4>
+                <span class="check-radio"></span>
+              </label>
           </div>
         </div>
 
@@ -693,71 +746,80 @@
           <h2>Placement</h2>
           <div class="multicontrol-2col">
             <div class="control">
-              <p id="scoreboard-placement-control" onclick="updateScoreboardPlacement('top-left', 0, 0)">Position:</p>
+              <h3 id="scoreboard-placement-control" onclick="updateScoreboardPlacement('top-left')">Position:</h3>
               <div class="radio-grid" id="sb-placement-radio-grid">
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="top-left" id="sb-placement-radio-top-left" onclick="updateScoreboardPlacement(this.value, 0, 0)" checked> <i class="corners-icons icon-top-left"></i>
+                  <input type="radio" name="placement" value="top-left" id="sb-placement-radio-top-left" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-top-left"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="top-center" id="sb-placement-radio-top-center" onclick="updateScoreboardPlacement(this.value,0, 0)"> <i class="corners-icons icon-top-center"></i>
+                  <input type="radio" name="placement" value="top-center" id="sb-placement-radio-top-center" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-top-center"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="top-right" id="sb-placement-radio-top-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-top-right"></i>
+                  <input type="radio" name="placement" value="top-right" id="sb-placement-radio-top-right" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-top-right"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="left-middle" id="sb-placement-radio-left-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-left-middle"></i>
+                  <input type="radio" name="placement" value="middle-left" id="sb-placement-radio-middle-left" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-left-middle"></i>
                   <span class="check-radio"></span>
                 </label>
                 <div></div>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="right-middle" id="sb-placement-radio-right-middle" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-right-middle"></i>
+                  <input type="radio" name="placement" value="middle-right" id="sb-placement-radio-middle-right" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-right-middle"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="bottom-left" id="sb-placement-radio-bottom-left" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-left"></i>
+                  <input type="radio" name="placement" value="bottom-left" id="sb-placement-radio-bottom-left" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-bottom-left"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="bottom-center" id="sb-placement-radio-bottom-center" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="corners-icons icon-bottom-center"></i>
+                  <input type="radio" name="placement" value="bottom-center" id="sb-placement-radio-bottom-center" onclick="updateScoreboardPlacement(this.value)"> <i class="corners-icons icon-bottom-center"></i>
                   <span class="check-radio"></span>
                 </label>
                 <label class="radio-option">
-                  <input type="radio" name="placement" value="bottom-right" id="scoreboard-placement-radio-bottom-right" onclick="updateScoreboardPlacement(this.value, 0, 0)"> <i class="customIcons icon-bottom-right"></i>
+                  <input type="radio" name="placement" value="bottom-right" id="sb-placement-radio-bottom-right" onclick="updateScoreboardPlacement(this.value)"> <i class="customIcons icon-bottom-right"></i>
                   <span class="check-radio"></span>
                 </label>
               </div>
             </div>
             <div class="control">
-              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">X: 10px</p>
-              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)">
-              <p id="scoreboard-vertical-margin-control" onclick="updateScoreboardMargin(10)">Y: 10px</p>
-              <input type="range" min="0" max="1000" value="10" class="slider" id="scoreboard-margin-slider" oninput="updateScoreboardMargin(this.value)" disabled>
+              <h3 id="sb-X-control" onclick="updateScoreboardX(0)">X: </h3>
+              <input type="range" min="0" max="1000" value="0" class="slider" id="sb-X-slider" oninput="updateScoreboardX(this.value)">
+              <h3 id="sb-Y-control" onclick="updateScoreboardY(0)">Y: </h3>
+              <input type="range" min="0" max="1000" value="0" class="slider" id="sb-Y-slider" oninput="updateScoreboardY(this.value)">
             </div>
           </div>
 
         </div>
         <div class="controls-container" id="other-controls">
           <div class="control">
-            <p id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</p>
+            <h3 id="scoreboard-shadow-control" onclick="updateScoreboardShadow('On')">Shadow:</h3>
             <!-- <div class="radio-grid" id="normal-binary-radio-grid"> -->
               <label class="radio-option">
                 <input type="radio" name="scoreboard-shadow" value="On" id="scoreboard-shadow-radio-on" onclick="updateScoreboardShadow(this.value)" checked>
-                On
+                <h4 class="radio-text">On</h4>
                 <span class="check-radio"></span>
               </label>
               <label class="radio-option">
                 <input type="radio" name="scoreboard-shadow" value="Off" id="scoreboard-shadow-radio-off" onclick="updateScoreboardShadow(this.value)">
-                Off
+                <h4 class="radio-text">Off</h4>
                 <span class="check-radio"></span>
               </label>
             <!-- </div> -->
           </div>
           <div class="control">
-            <p id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </p>
+            <h3 id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </h3>
             <input type="text" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+          </div>
+          <div class="control">
+            <h3 id="scoreboard-background-control" onclick="updateScoreboardBackground('')">Style Override: </h3>
+            <input type="number" id="scoreboard-background-textbox" placeholder="CSS" onkeydown="updateScoreboardBackground(this.value)">
+          </div>
+          <div class="control">
+            <button id="center-style-button" onclick="removeSBSection();">
+              Test Button
+            </button>
           </div>
         </div>
       </div>
@@ -1059,20 +1121,26 @@
 
 <script>
 
-// var sb-xPos;
-// var sb-yPos;
 var sbSections = 0;
-var sbPosition = "";
+var sbPosition;
+var scoreboard = document.querySelector(".scoreboard");
 
 initializeSettings();
-addSBSection(3);
+initializeScoreboard();
 dragElement(document.getElementById("settings-overlay"));
+
+function initializeScoreboard() {
+  updateScoreboardPlacement("top-center");
+  updateScoreboardDirection("row");
+  addSBSection(3);
+}
 
 // console.log(window.innerHeight);
 // document.getElementById("scoreboard-margin-slider").max = (window.innerHeight/2);
 
 window.onresize = function() {
-    document.getElementById("scoreboard-margin-slider").max = (window.innerHeight/2);
+  document.getElementById("sb-X-slider").max = (window.innerWidth/2);
+  document.getElementById("sb-Y-slider").max = (window.innerHeight/2);
 };
 
 function initializeSettings() {
@@ -1081,6 +1149,9 @@ function initializeSettings() {
   document.getElementById("style-page").classList.add("settings-page-hidden");
   document.getElementById("text-page").classList.add("settings-page-hidden");
   document.getElementById("import-export-page").classList.add("settings-page-hidden");
+
+  document.getElementById("sb-X-slider").max = (window.innerWidth/2);
+  document.getElementById("sb-Y-slider").max = (window.innerHeight/2);
 }
 
 document.addEventListener('keyup', function (event) {
@@ -1090,6 +1161,7 @@ document.addEventListener('keyup', function (event) {
     var key = event.key;
     if (key === 'S' || key === 's') {
         document.getElementById("settings-overlay").classList.toggle("settings-show");
+        document.getElementById("viewport-border").classList.toggle("settings-show");
     }
 });
 
@@ -1141,16 +1213,64 @@ function changeSettingsPage(e) {
     document.getElementById("size-page").classList.add("settings-page-hidden")
     document.getElementById("style-page").classList.add("settings-page-hidden");
     document.getElementById("text-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.add("settings-page-hidden");
   }
   if (e.id === "settings-layout") {
     document.getElementById("main-menu").classList.add("settings-page-hidden");
+    document.getElementById("size-page").classList.add("settings-page-hidden");
+    document.getElementById("style-page").classList.add("settings-page-hidden");
+    document.getElementById("text-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.add("settings-page-hidden");
     document.getElementById("layout-page").classList.remove("settings-page-hidden");
   }
   if (e.id === "settings-size") {
     document.getElementById("main-menu").classList.add("settings-page-hidden");
     document.getElementById("layout-page").classList.add("settings-page-hidden")
+    document.getElementById("style-page").classList.add("settings-page-hidden");
+    document.getElementById("text-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.add("settings-page-hidden");
     document.getElementById("size-page").classList.remove("settings-page-hidden");
   }
+  if (e.id === "settings-style") {
+    document.getElementById("main-menu").classList.add("settings-page-hidden");
+    document.getElementById("layout-page").classList.add("settings-page-hidden")
+    document.getElementById("size-page").classList.add("settings-page-hidden");
+    document.getElementById("text-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.add("settings-page-hidden");
+    document.getElementById("style-page").classList.remove("settings-page-hidden");
+  }
+  if (e.id === "settings-text") {
+    document.getElementById("main-menu").classList.add("settings-page-hidden");
+    document.getElementById("layout-page").classList.add("settings-page-hidden")
+    document.getElementById("size-page").classList.add("settings-page-hidden");
+    document.getElementById("style-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.add("settings-page-hidden");
+    document.getElementById("text-page").classList.remove("settings-page-hidden");
+  }
+  if (e.id === "settings-import-export") {
+    document.getElementById("main-menu").classList.add("settings-page-hidden");
+    document.getElementById("layout-page").classList.add("settings-page-hidden")
+    document.getElementById("size-page").classList.add("settings-page-hidden");
+    document.getElementById("style-page").classList.add("settings-page-hidden");
+    document.getElementById("text-page").classList.add("settings-page-hidden");
+    document.getElementById("import-export-page").classList.remove("settings-page-hidden");
+  }
+}
+
+function updateScoreboardDirection(direction) {
+  if (direction == "column") {
+    document.getElementById("sb-direction-column").checked = true;
+    scoreboard.style.setProperty('flex-direction', "column");
+  }
+  else if (direction == "row") {
+    document.getElementById("sb-direction-row").checked = true;
+    scoreboard.style.setProperty('flex-direction', "row");
+  }
+  var xOff = document.getElementById("sb-X-slider").value;
+  var yOff = document.getElementById("sb-Y-slider").value;
+  updateScoreboardPlacement(sbPosition);
+  updateScoreboardX(xOff);
+  updateScoreboardY(yOff);
 }
 
 function addSBSection(amount) {
@@ -1163,6 +1283,11 @@ function addSBSection(amount) {
     newSection.classList.add("section" + sbSections);
     newSection.innerHTML = sbSections;
     document.querySelector(".scoreboard").appendChild(newSection);
+    var xOff = document.getElementById("sb-X-slider").value;
+    var yOff = document.getElementById("sb-Y-slider").value;
+    updateScoreboardPlacement(sbPosition);
+    updateScoreboardX(xOff);
+    updateScoreboardY(yOff);
   }
 }
 
@@ -1171,7 +1296,12 @@ function removeSBSection() {
     document.querySelector(".scoreboard").removeChild(document.querySelector(".section" + sbSections));
     sbSections--;
     document.getElementById("section-step-text").innerHTML = sbSections;
-    updateScoreboardPlacement(sbPosition, 0, 0);
+    var xOff = document.getElementById("sb-X-slider").value;
+    var yOff = document.getElementById("sb-Y-slider").value;
+    updateScoreboardPlacement(sbPosition);
+    updateScoreboardX(xOff);
+    updateScoreboardY(yOff);
+    // updateScoreboardPlacement(sbPosition, 0, 0);
   }
 }
 
@@ -1227,71 +1357,113 @@ function removeSBSection() {
 // }
 //
 
-function updateScoreboardPlacement(position, x, y) {
+function updateScoreboardPlacement(position) {
   sbPosition = position;
-  var scoreboard = document.querySelector(".scoreboard");
+  updateScoreboardX(0);
+  updateScoreboardY(0);
   switch(position) {
     case "top-left":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('right');
-      scoreboard.style.setProperty('left', x);
-      scoreboard.style.setProperty('top', y);
+      scoreboard.style.setProperty('left', 0);
+      scoreboard.style.setProperty('top', 0);
       document.getElementById("sb-placement-radio-top-left").checked = true;
-      return position;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
     case "top-center":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', (window.innerWidth/2)-(scoreboard.offsetWidth/2));
-      scoreboard.style.setProperty('top', y);
-      return position;
+      scoreboard.style.setProperty('top', 0);
+      document.getElementById("sb-placement-radio-top-center").checked = true;
+      document.getElementById("sb-X-slider").disabled = true;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
     case "top-right":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('left');
-      scoreboard.style.setProperty('right', x);
-      scoreboard.style.setProperty('top', y);
-      return position;
+      scoreboard.style.setProperty('right', 0);
+      scoreboard.style.setProperty('top', 0);
+      document.getElementById("sb-placement-radio-top-right").checked = true;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
-    case "left-middle":
+    case "middle-left":
       scoreboard.style.removeProperty('bottom');
       scoreboard.style.removeProperty('right');
-      scoreboard.style.setProperty('left', x);
+      scoreboard.style.setProperty('left', 0);
+      document.getElementById("sb-placement-radio-middle-left").checked = true;
       scoreboard.style.setProperty('top', (window.innerHeight/2)-(scoreboard.offsetHeight/2));
-      return position;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = true;
       break;
-    case "right-middle":
+    case "middle-right":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('left');
-      scoreboard.style.setProperty('right', x);
+      scoreboard.style.setProperty('right', 0);
+      document.getElementById("sb-placement-radio-middle-right").checked = true;
       scoreboard.style.setProperty('bottom', (window.innerHeight/2)-(scoreboard.offsetHeight/2));
-      return position;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = true;
       break;
     case "bottom-left":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('right');
-      scoreboard.style.setProperty('left', x);
-      scoreboard.style.setProperty('bottom', y);
-      return position;
+      scoreboard.style.setProperty('left', 0);
+      scoreboard.style.setProperty('bottom', 0);
+      document.getElementById("sb-placement-radio-bottom-left").checked = true;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
     case "bottom-center":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('right');
       scoreboard.style.setProperty('left', (window.innerWidth/2)-(scoreboard.offsetWidth/2));
-      scoreboard.style.setProperty('bottom', y);
-      return position;
+      scoreboard.style.setProperty('bottom', 0);
+      document.getElementById("sb-placement-radio-bottom-center").checked = true;
+      document.getElementById("sb-X-slider").disabled = true;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
-      case "bottom-right":
+    case "bottom-right":
       scoreboard.style.removeProperty('top');
       scoreboard.style.removeProperty('left');
-      scoreboard.style.setProperty('right', x);
-      scoreboard.style.setProperty('bottom', y);
-      return position;
+      scoreboard.style.setProperty('right', 0);
+      scoreboard.style.setProperty('bottom', 0);
+      document.getElementById("sb-placement-radio-bottom-right").checked = true;
+      document.getElementById("sb-X-slider").disabled = false;
+      document.getElementById("sb-Y-slider").disabled = false;
       break;
     default:
       console.log("default");
-      return position;
   }
+}
+
+function updateScoreboardX(value) {
+  var scoreboard = document.querySelector(".scoreboard");
+  if ((sbPosition == "top-left") || (sbPosition == "middle-left") || (sbPosition == "bottom-left")) {
+    scoreboard.style.setProperty('left', value);
+  }
+  else if ((sbPosition == "top-right") || (sbPosition == "middle-right") || (sbPosition == "bottom-right")) {
+    scoreboard.style.setProperty('right', value);
+  }
+  document.getElementById("sb-X-slider").value = value;
+  document.getElementById("sb-X-control").innerHTML = "X Offset: " + value + "px";
+  // document.documentElement.style.setProperty('--scoreboard-vertical-margin', value + "px");
+  // document.getElementById("scoreboard-vertical-margin-control").innerHTML = "Top: " + value + "px";
+  // document.getElementById("scoreboard-margin-slider").value = value;
+}
+
+function updateScoreboardY(value) {
+  var scoreboard = document.querySelector(".scoreboard");
+  if ((sbPosition == "top-left") || (sbPosition == "top-center") || (sbPosition == "top-right")) {
+    scoreboard.style.setProperty('top', value);
+  }
+  else if ((sbPosition == "bottom-left") || (sbPosition == "bottom-center") || (sbPosition == "bottom-right")) {
+    scoreboard.style.setProperty('bottom', value);
+  }
+  document.getElementById("sb-Y-slider").value = value;
+  document.getElementById("sb-Y-control").innerHTML = "Y Offset: " + value + "px";
 }
 //
 // function updateScoreboardScale(value) {
